@@ -30,7 +30,7 @@
 // email <mota@souitom.net>
 //
 // Started on  Mon May  3 12:50:26 2010 mota
-// Last update Tue May  4 11:16:04 2010 pierre wacrenier
+// Last update Tue May  4 11:51:07 2010 pierre wacrenier
 //
 
 #include <iostream>
@@ -62,12 +62,8 @@ namespace ZX
 
   ZDisplay::~ZDisplay()
   {
-    XCloseDisplay(_dpy);
-  }
-
-  bool			ZDisplay::isOpen(void) const
-  {
-    return (_dpy != NULL);
+    if (_dpy != NULL)
+      XCloseDisplay(_dpy);
   }
 
   ZDisplay *	ZDisplay::getInstance(void)
@@ -98,4 +94,18 @@ namespace ZX
       }
   }
 
+  bool			ZDisplay::isOpen(void) const
+  {
+    return (_dpy != NULL);
+  }
+
+  Display *		ZDisplay::getDisplay(void) const
+  {
+    return (_dpy);
+  }
+
+  std::string		ZDisplay::getName(void) const
+  {
+    return (_name);
+  }
 }

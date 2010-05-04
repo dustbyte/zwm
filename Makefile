@@ -5,7 +5,7 @@
 ## Login   <wacren_p@epitech.net>
 ##
 ## Started on  Mon May  3 16:39:13 2010 pierre wacrenier
-## Last update Mon May  3 19:16:08 2010 pierre wacrenier
+## Last update Tue May  4 11:50:12 2010 pierre wacrenier
 ##
 
 TYPE		=	$(shell uname -s)
@@ -24,7 +24,7 @@ CXXFLAGS	+=	-g3
 CXXFLAGS	+=	-D${TYPE} -D_REENTRANT -D__EXTENSIONS__
 CXXFLAGS	+=	-D_POSIX_PTHREAD_SEMANTICS -D_BSD_SOURCE -D_GNU_SOURCE
 
-CFLAGS		+=	-I$(HDRDIR) -I/usr/X11R6/include
+CXXFLAGS	+=	-I$(HDRDIR) -I/usr/X11R6/include
 
 LDFLAGS		=	-L/usr/X11R6/lib -lX11
 
@@ -61,6 +61,6 @@ tags:
 			ctags `find . -name "*.[ch]"`
 
 .cpp.o:
-			$(CXX) $(CFLAGS) $(INCLUDE) -c $< -o $@
+			$(CXX) $(CXXFLAGS) $(INCLUDE) -c $< -o $@
 
 .PHONY:			clean all fclean mrproper re

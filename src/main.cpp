@@ -6,8 +6,12 @@
 int		main(void)
 {
   ZX::ZDisplay	*dpy;
+  std::string	name;
 
   dpy = ZX::ZDisplay::getInstance();
-  std::cout << dpy->isOpen() << std::endl;
+  if (dpy->isOpen() && dpy->getName().size() > 0)
+    {
+      std::cout << "name = " << dpy->getName() << std::endl;
+    }
   return (0);
 }

@@ -30,7 +30,7 @@
 // email <mota@souitom.net>
 //
 // Started on  Tue May  4 11:07:49 2010 mota
-// Last update Tue May  4 11:15:33 2010 pierre wacrenier
+// Last update Tue May  4 11:41:40 2010 pierre wacrenier
 //
 
 #include <string>
@@ -42,9 +42,9 @@ namespace ZX
   class ZDisplay
   {
   private:
-    static ZDisplay * _instance;
-    Display * _dpy;
-    std::string _name;
+    static ZDisplay *	_instance;
+    Display *		_dpy;
+    std::string		_name;
 
     ZDisplay(const std::string & name);
     ZDisplay(const ZDisplay &); // undefined
@@ -54,8 +54,10 @@ namespace ZX
     static void		destroyInstance(void);
 
   public:
-    bool		isOpen(void) const;
     static ZDisplay *	getInstance(void);
     static ZDisplay *	getInstance(const std::string & name);
+    bool		isOpen(void) const;
+    Display *		getDisplay(void) const;
+    std::string		getName(void) const;
   };
 }
