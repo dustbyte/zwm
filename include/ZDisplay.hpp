@@ -30,7 +30,7 @@
 // email <mota@souitom.net>
 //
 // Started on  Tue May  4 11:07:49 2010 mota
-// Last update Tue May  4 11:41:40 2010 pierre wacrenier
+// Last update Tue May  4 16:59:17 2010 pierre wacrenier
 //
 
 #include <string>
@@ -46,16 +46,19 @@ namespace ZX
     Display *		_dpy;
     std::string		_name;
 
-    ZDisplay(const std::string & name);
-    ZDisplay(const ZDisplay &); // undefined
     ZDisplay(void);
+    ZDisplay(const std::string & name);
+    ZDisplay(const ZDisplay &);				// not implemented
+
+    ZDisplay		operator=(const ZDisplay &);	// not implemented
+
     virtual ~ZDisplay();
 
     static void		destroyInstance(void);
 
   public:
-    static ZDisplay *	getInstance(void);
-    static ZDisplay *	getInstance(const std::string & name);
+    static ZDisplay &	getInstance(void);
+    static ZDisplay &	getInstance(const std::string & name);
     bool		isOpen(void) const;
     Display *		getDisplay(void) const;
     std::string		getName(void) const;

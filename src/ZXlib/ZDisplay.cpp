@@ -30,7 +30,7 @@
 // email <mota@souitom.net>
 //
 // Started on  Mon May  3 12:50:26 2010 mota
-// Last update Tue May  4 11:51:07 2010 pierre wacrenier
+// Last update Tue May  4 16:59:50 2010 pierre wacrenier
 //
 
 #include <iostream>
@@ -46,18 +46,18 @@ namespace ZX
 
   ZDisplay*	ZDisplay::_instance = NULL;
 
-  ZDisplay::ZDisplay(const std::string & name) :
-    _dpy(NULL),
-    _name(name)
-  {
-    _dpy = XOpenDisplay(_name.c_str());
-  }
-
   ZDisplay::ZDisplay(void) :
     _dpy(NULL),
     _name()
   {
     _dpy = XOpenDisplay(NULL);
+  }
+
+  ZDisplay::ZDisplay(const std::string & name) :
+    _dpy(NULL),
+    _name(name)
+  {
+    _dpy = XOpenDisplay(_name.c_str());
   }
 
   ZDisplay::~ZDisplay()
@@ -66,32 +66,32 @@ namespace ZX
       XCloseDisplay(_dpy);
   }
 
-  ZDisplay *	ZDisplay::getInstance(void)
-  {
-    if (ZDisplay::_instance == NULL)
-      {
-	ZDisplay::_instance = new ZDisplay;
-	::atexit(ZDisplay::destroyInstance);
-      }
-    return (ZDisplay::_instance);
-  }
-
-  ZDisplay *	ZDisplay::getInstance(const std::string & name)
-  {
-    if (ZDisplay::_instance == NULL)
-      {
-	ZDisplay::_instance = new ZDisplay(name);
-	::atexit(ZDisplay::destroyInstance);
-      }
-    return (ZDisplay::_instance);
-  }
-
   void		ZDisplay::destroyInstance(void)
   {
     if (ZDisplay::_instance != NULL)
       {
 	delete ZDisplay::_instance;
       }
+  }
+
+  ZDisplay &	ZDisplay::getInstance(void)
+  {
+    if (ZDisplay::_instance == NULL)
+      {
+	ZDisplay::_instance = new ZDisplay;
+	::atexit(ZDisplay::destroyInstance);
+      }
+    return (*(ZDisplay::_instance));
+  }
+
+  ZDisplay &	ZDisplay::getInstance(const std::string & name)
+  {
+    if (ZDisplay::_instance == NULL)
+      {
+	ZDisplay::_instance = new ZDisplay(name);
+	::atexit(ZDisplay::destroyInstance);
+      }
+    return (*(ZDisplay::_instance));
   }
 
   bool			ZDisplay::isOpen(void) const

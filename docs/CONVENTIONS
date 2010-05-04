@@ -9,17 +9,18 @@ Namespaces:
 
 Coding Style:
 -A block is always defined between braces;
--Opening brace is on the same line than a keyword, but on the line below a
- function/method prototype;
 -Use strl(cpy|cat);
 -Use std::string instead of string.h;
 -Overall, use as much C++ as you can;
 -Use as much significant code as you can, don't fear to be verbose;
--Comment as much as possible, plz
+-Comment as much as possible, plz;
 -when using pointer or references, append the ampersand or the asterisk to
- the type: use std::string* name instead of std::string *name
--A destructor is ALWAYS virtual
--explicitely specify the global namespace for c functions (eg: ::read(1, buf, 512))
+ the type: use std::string* name instead of std::string *name;
+-A destructor is ALWAYS virtual;
+-explicitely specify the global namespace for c functions
+ (eg: ::read(1, buf, 512));
+-When a method is defined but not implemented, add a comment to mean it
+ (eg: //not implemented)
 
 From *Wesnoth.org*:
 -Avoid implicit conversions;

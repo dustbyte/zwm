@@ -3,15 +3,14 @@
 
 #include "ZDisplay.hpp"
 
-int		main(void)
+int			main(void)
 {
-  ZX::ZDisplay	*dpy;
-  std::string	name;
+  ZX::ZDisplay &	dpy = ZX::ZDisplay::getInstance();
+  std::string		name;
 
-  dpy = ZX::ZDisplay::getInstance();
-  if (dpy->isOpen() && dpy->getName().size() > 0)
+  if (dpy.isOpen() && dpy.getName().size() > 0)
     {
-      std::cout << "name = " << dpy->getName() << std::endl;
+      std::cout << "name = " << dpy.getName() << std::endl;
     }
   return (0);
 }
