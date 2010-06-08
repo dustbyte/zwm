@@ -30,7 +30,7 @@
 // email <mota@souitom.net>
 //
 // Started on  Mon May  3 12:50:26 2010 mota
-// Last update Tue May  4 16:59:50 2010 pierre wacrenier
+// Last update Wed May  5 16:53:55 2010 pierre wacrenier
 //
 
 #include <iostream>

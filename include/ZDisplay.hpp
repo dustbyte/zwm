@@ -50,7 +50,7 @@ namespace ZX
     ZDisplay(const std::string & name);
     ZDisplay(const ZDisplay &);				// not implemented
 
-    ZDisplay		operator=(const ZDisplay &);	// not implemented
+    ZDisplay&		operator=(const ZDisplay &);	// not implemented
 
     virtual ~ZDisplay();
 
