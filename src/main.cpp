@@ -1,7 +1,7 @@
 
 #include <iostream>
 
-#include "ZDisplay.hpp"
+#include "Display.hpp"
 
 int			main(void)
 {

@@ -5,7 +5,7 @@
 ## Login   <wacren_p@epitech.net>
 ##
 ## Started on  Mon May  3 16:39:13 2010 pierre wacrenier
-## Last update Wed Jun 23 17:14:47 2010 pierre wacrenier
+## Last update Wed Jun 23 18:48:40 2010 pierre wacrenier
 ##
 
 TYPE		=	$(shell uname -s)
@@ -31,7 +31,7 @@ LDFLAGS		=	-L/usr/X11R6/lib -lX11
 SRCDIR		=	src
 HDRDIR		=	include
 
-SRCS		=	$(SRCDIR)/ZXlib/ZDisplay.cpp	\
+SRCS		=	$(SRCDIR)/ZXlib/Display.cpp	\
 			$(SRCDIR)/main.cpp
 
 OBJS		=	$(SRCS:.cpp=.o)
