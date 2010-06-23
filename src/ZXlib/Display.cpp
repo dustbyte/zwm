@@ -3,7 +3,7 @@
 // All rights reserved.
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions are met:
-//
+// 
 //     * Redistributions of source code must retain the above copyright
 //       notice, this list of conditions and the following disclaimer.
 //     * Redistributions in binary form must reproduce the above copyright
@@ -12,7 +12,7 @@
 //     * Neither the name of the University of California, Berkeley nor the
 //       names of its contributors may be used to endorse or promote products
 //       derived from this software without specific prior written permission.
-//
+// 
 // THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND ANY
 // EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 // WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -23,14 +23,14 @@
 // ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-// ZDisplay.cpp for project zwm
-//
+// 
+// Display.cpp for project zwm
+// 
 // Made by mota
 // email <mota@souitom.net>
-//
-// Started on  Mon May  3 12:50:26 2010 mota
-// Last update Wed May  5 16:53:55 2010 pierre wacrenier
+// 
+// Started on  Wed Jun 23 17:20:35 2010 mota
+// Last update Wed Jun 23 17:20:36 2010 pierre wacrenier
 //
 
 #include <iostream>
@@ -44,67 +44,67 @@
 namespace ZX
 {
 
-  ZDisplay*	ZDisplay::_instance = NULL;
+  Display*	Display::_instance = NULL;
 
-  ZDisplay::ZDisplay(void) :
+  Display::Display(void) :
     _dpy(NULL),
     _name()
   {
     _dpy = XOpenDisplay(NULL);
   }
 
-  ZDisplay::ZDisplay(const std::string & name) :
+  Display::Display(const std::string & name) :
     _dpy(NULL),
     _name(name)
   {
     _dpy = XOpenDisplay(_name.c_str());
   }
 
-  ZDisplay::~ZDisplay()
+  Display::~Display()
   {
     if (_dpy != NULL)
       XCloseDisplay(_dpy);
   }
 
-  void		ZDisplay::destroyInstance(void)
+  void		Display::destroyInstance(void)
   {
-    if (ZDisplay::_instance != NULL)
+    if (Display::_instance != NULL)
       {
-	delete ZDisplay::_instance;
+	delete Display::_instance;
       }
   }
 
-  ZDisplay &	ZDisplay::getInstance(void)
+  Display &	Display::getInstance(void)
   {
-    if (ZDisplay::_instance == NULL)
+    if (Display::_instance == NULL)
       {
-	ZDisplay::_instance = new ZDisplay;
-	::atexit(ZDisplay::destroyInstance);
+	Display::_instance = new Display;
+	::atexit(Display::destroyInstance);
       }
-    return (*(ZDisplay::_instance));
+    return (*(Display::_instance));
   }
 
-  ZDisplay &	ZDisplay::getInstance(const std::string & name)
+  Display &	Display::getInstance(const std::string & name)
   {
-    if (ZDisplay::_instance == NULL)
+    if (Display::_instance == NULL)
       {
-	ZDisplay::_instance = new ZDisplay(name);
-	::atexit(ZDisplay::destroyInstance);
+	Display::_instance = new Display(name);
+	::atexit(Display::destroyInstance);
       }
-    return (*(ZDisplay::_instance));
+    return (*(Display::_instance));
   }
 
-  bool			ZDisplay::isOpen(void) const
+  bool			Display::isOpen(void) const
   {
     return (_dpy != NULL);
   }
 
-  Display *		ZDisplay::getDisplay(void) const
+  ::Display *		Display::getDisplay(void) const
   {
     return (_dpy);
   }
 
-  std::string		ZDisplay::getName(void) const
+  std::string		Display::getName(void) const
   {
     return (_name);
   }

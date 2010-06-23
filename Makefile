@@ -5,7 +5,7 @@
 ## Login   <wacren_p@epitech.net>
 ##
 ## Started on  Mon May  3 16:39:13 2010 pierre wacrenier
-## Last update Tue May  4 11:50:12 2010 pierre wacrenier
+## Last update Wed Jun 23 17:14:47 2010 pierre wacrenier
 ##
 
 TYPE		=	$(shell uname -s)

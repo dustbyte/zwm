@@ -5,7 +5,7 @@
 
 int			main(void)
 {
-  ZX::ZDisplay &	dpy = ZX::ZDisplay::getInstance();
+  ZX::Display &		dpy = ZX::Display::getInstance();
   std::string		name;
 
   if (dpy.isOpen() && dpy.getName().size() > 0)

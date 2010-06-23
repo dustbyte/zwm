@@ -24,13 +24,13 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-// ZDisplay.hpp for project zwm
+// Dislpay.hpp for project zwm
 //
 // Made by mota
 // email <mota@souitom.net>
 //
-// Started on  Tue May  4 11:07:49 2010 mota
-// Last update Tue May  4 16:59:17 2010 pierre wacrenier
+// Started on  Wed Jun 23 17:21:00 2010 mota
+// Last update Wed Jun 23 17:21:02 2010 pierre wacrenier
 //
 
 #include <string>
@@ -39,28 +39,28 @@
 
 namespace ZX
 {
-  class ZDisplay
+  class Display
   {
   private:
-    static ZDisplay *	_instance;
-    Display *		_dpy;
+    static Display *	_instance;
+    ::Display *		_dpy;
     std::string		_name;
 
-    ZDisplay(void);
-    ZDisplay(const std::string & name);
-    ZDisplay(const ZDisplay &);				// not implemented
+    Display(void);
+    Display(const std::string & name);
+    Display(const Display &);				// not implemented
 
-    ZDisplay&		operator=(const ZDisplay &);	// not implemented
+    Display&		operator=(const Display &);	// not implemented
 
-    virtual ~ZDisplay();
+    virtual ~Display();
 
     static void		destroyInstance(void);
 
   public:
-    static ZDisplay &	getInstance(void);
-    static ZDisplay &	getInstance(const std::string & name);
+    static Display &	getInstance(void);
+    static Display &	getInstance(const std::string & name);
     bool		isOpen(void) const;
-    Display *		getDisplay(void) const;
+    ::Display *		getDisplay(void) const;
     std::string		getName(void) const;
   };
 }
