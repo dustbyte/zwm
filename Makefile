@@ -5,7 +5,7 @@
 ## Login   <wacren_p@epitech.net>
 ##
 ## Started on  Mon May  3 16:39:13 2010 pierre wacrenier
-## Last update Wed Jun 23 18:48:40 2010 pierre wacrenier
+## Last update Fri Jun 25 19:27:04 2010 pierre wacrenier
 ##
 
 TYPE		=	$(shell uname -s)
@@ -32,6 +32,7 @@ SRCDIR		=	src
 HDRDIR		=	include
 
 SRCS		=	$(SRCDIR)/ZXlib/Display.cpp	\
+			$(SRCDIR)/ZXlib/Log.cpp		\
 			$(SRCDIR)/main.cpp
 
 OBJS		=	$(SRCS:.cpp=.o)

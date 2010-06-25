@@ -1,3 +1,6 @@
+#ifndef DISPLAY_HPP_
+#define DISPLAY_HPP_
+
 #include <string>
 
 #include <X11/Xlib.h>
@@ -7,10 +10,10 @@ namespace ZX
   class Display
   {
   private:
-    static Display *	_instance;
-    ::Display *		_dpy;
-    int			_screen;
-    std::string		_name;
+    static Display *	mInstance;
+    ::Display *		mDpy;
+    int			mScreen;
+    std::string		mName;
 
     Display(void);
     Display(const std::string & name);
@@ -31,3 +34,5 @@ namespace ZX
     int			getScreen(void) const;
   };
 }
+
+#endif		// DISPLAY_HPP_

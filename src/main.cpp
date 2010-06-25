@@ -2,15 +2,14 @@
 #include <iostream>
 
 #include "Display.hpp"
+#include "Log.hpp"
 
 int			main(void)
 {
   ZX::Display &		dpy = ZX::Display::getInstance();
-  std::string		name;
+  ZX::Log		log;
 
-  if (dpy.isOpen() && dpy.getName().size() > 0)
-    {
-      std::cout << "name = " << dpy.getName() << std::endl;
-    }
+  if (dpy.isOpen())
+    log.debug("display open\n");
   return (0);
 }

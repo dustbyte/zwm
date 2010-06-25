@@ -9,76 +9,76 @@
 namespace ZX
 {
 
-  Display*	Display::_instance = NULL;
+  Display*		Display::mInstance = NULL;
 
   Display::Display(void) :
-    _dpy(NULL),
-    _name()
+    mDpy(NULL),
+    mName()
   {
-    _dpy = XOpenDisplay(NULL);
-    _screen = DefaultScreen(_dpy);
+    mDpy = XOpenDisplay(NULL);
+    mScreen = DefaultScreen(mDpy);
   }
 
   Display::Display(const std::string & name) :
-    _dpy(NULL),
-    _name(name)
+    mDpy(NULL),
+    mName(name)
   {
-    _dpy = XOpenDisplay(_name.c_str());
-    _screen = DefaultScreen(_dpy);
+    mDpy = XOpenDisplay(mName.c_str());
+    mScreen = DefaultScreen(mDpy);
   }
 
   Display::~Display()
   {
-    if (_dpy != NULL)
-      XCloseDisplay(_dpy);
+    if (mDpy != NULL)
+      XCloseDisplay(mDpy);
   }
 
-  void		Display::destroyInstance(void)
+  void			Display::destroyInstance(void)
   {
-    if (Display::_instance != NULL)
+    if (Display::mInstance != NULL)
       {
-	delete Display::_instance;
+	delete Display::mInstance;
       }
   }
 
   Display &	Display::getInstance(void)
   {
-    if (Display::_instance == NULL)
+    if (Display::mInstance == NULL)
       {
-	Display::_instance = new Display;
+	Display::mInstance = new Display;
 	::atexit(Display::destroyInstance);
       }
-    return (*(Display::_instance));
+    return (*(Display::mInstance));
   }
 
-  Display &	Display::getInstance(const std::string & name)
+  Display &		Display::getInstance(const std::string & name)
   {
-    if (Display::_instance == NULL)
+    if (Display::mInstance == NULL)
       {
-	Display::_instance = new Display(name);
+	Display::mInstance = new Display(name);
 	::atexit(Display::destroyInstance);
       }
-    return (*(Display::_instance));
+    return (*(Display::mInstance));
   }
 
   bool			Display::isOpen(void) const
   {
-    return (_dpy != NULL);
+    return (mDpy != NULL);
   }
 
   ::Display *		Display::getDisplay(void) const
   {
-    return (_dpy);
+    return (mDpy);
   }
 
   std::string		Display::getName(void) const
   {
-    return (_name);
+    return (mName);
   }
 
   int			Display::getScreen(void) const
   {
-    return (_screen);
+    return (mScreen);
   }
 
 }
