@@ -29,4 +29,12 @@ Conf		conf =
     "#838383"
   };
 
+const char *xtermcmd[] = {"xterm", NULL};
+
+const Key keys[] =
+{
+  {ModKey,		XK_Return,	NULL,	{.args = xtermcmd}	},
+  {ModKey,		XK_h,		NULL,	{.val = -1}		}
+};
+
 #endif		/* !CONFIG_H_ */

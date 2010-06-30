@@ -39,7 +39,7 @@ typedef struct	_Wm
 typedef union	_Arg
 {
   int		val;
-  char		*args;
+  const void	*args;
 }		Arg;
 
 typedef struct	_Key

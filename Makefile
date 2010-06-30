@@ -20,7 +20,7 @@ LIBDIR		=	libs
 
 CFLAGS		+=	-O2 -Werror -DNDEBUG
 CFLAGS		=	-g3
-CFLAGS		+=	-W -Wall -ansi -pedantic
+CFLAGS		+=	-W -Wall -pedantic -std=c99
 CFLAGS		+=	-D${TYPE} -D_REENTRANT -D__EXTENSIONS__
 CFLAGS		+=	-D_POSIX_PTHREAD_SEMANTICS -D_BSD_SOURCE -D_GNU_SOURCE
 
