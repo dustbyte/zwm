@@ -33,6 +33,7 @@ SRCDIR		=	src
 HDRDIR		=	include
 
 SRCS		=	$(SRCDIR)/tools.c	\
+			$(SRCDIR)/windows.c	\
 			$(SRCDIR)/zwm.c
 
 OBJS		=	$(SRCS:.c=.o)

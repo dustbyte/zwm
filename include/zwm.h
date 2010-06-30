@@ -23,6 +23,12 @@ typedef struct	_Workspace
   char		*repr;
 }		Workspace;
 
+typedef struct	_ZWindow
+{
+  t_elem	self;
+  Window	win;
+}		ZWindow;
+
 typedef struct	_Conf
 {
   double	master_width;
@@ -32,13 +38,14 @@ typedef struct	_Conf
 
 typedef struct	_Wm
 {
-  unsigned int	cur_workspace;
+  Workspace	*cur_workspace;
   Workspace	*workspaces;
   Conf		*conf;
   Display	*dpy;
   int		screen;
   Window	root;
   Bool		is_running;
+  
 }		Wm;
 
 typedef union	_Arg
@@ -50,9 +57,21 @@ typedef union	_Arg
 typedef struct	_Key
 {
   unsigned int	mod;
-  KeySym	key;
+  KeySym	keysym;
   void		(*func)(const Arg *arg);
   Arg		arg;
 }		Key;
+
+/*
+** Handlers
+*/
+
+void		map_request(Wm *wm, XEvent *event);
+
+/*
+** Windows
+*/
+
+void		add_window(Wm *wm, Window window);
 
 #endif		/* !ZWM_H_ */

@@ -8,7 +8,7 @@
 #include "zwm.h"
 #include "tools.h"
 
-unsigned long	ZGetColor(const char *color, Wm *wm)
+unsigned long	get_color(const char *color, Wm *wm)
 {
   XColor	c;
   Colormap	map;

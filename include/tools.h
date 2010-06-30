@@ -6,6 +6,6 @@ typedef enum {
   ZTrue = 1
 }		ZBool;
 
-unsigned long	ZGetColor(const char *color, Wm *wm);
+unsigned long	get_color(const char *color, Wm *wm);
 
 #endif		/* !TOOLS_H_ */
