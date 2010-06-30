@@ -5,7 +5,6 @@
 #include <X11/keysym.h>
 
 #include "log.h"
-#include "lists.h"
 #include "zwm.h"
 #include "config.h"
 
@@ -15,13 +14,27 @@
 
 Wm		wm;
 
-static void	(*handlers[LASTEvent])(XEvent *event) =
+static void	(*handlers[LASTEvent])(Wm *wm, XEvent *event) =
 {
-  [KeyPress] = NULL,
+  [KeyPress] = keypress,
   [MapRequest] = NULL,
   [DestroyNotify] = NULL,
   [ConfigureNotify] = NULL
 };
+
+void		keypress(Wm *wm, XEvent *event)
+{
+  unsigned	i;
+  KeySym	keysym;
+  XKeyEvent	keyevent;
+
+  keyevent = event->xkey;
+  keysym = XKeycodeToKeysym(wm->dpy, keyevent.keycode, 0);
+
+  for (i = 0; i < TABLELENGTH(keys); ++i)
+    if (keys[i].key == keysym && keys[i].mod == keyevent.state)
+      keys[i].func(&keys[i].arg);
+}
 
 void		finish_wm(Wm *wm)
 {
@@ -34,7 +47,7 @@ void		run_wm(Wm *wm)
 
   while (wm->is_running && !XNextEvent(wm->dpy, &event))
     if (handlers[event.type])
-      handlers[event.type](&event);
+      handlers[event.type](wm, &event);
 }
 
 void		init_wm(Wm *wm)

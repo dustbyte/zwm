@@ -6,6 +6,8 @@
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
 
+#include "lists.h"
+
 #define	TABLELENGTH(X) (sizeof((X)) / sizeof(*(X)))
 
 typedef struct _Client
@@ -54,5 +56,13 @@ typedef struct	_Key
   void		(*func)(const Arg *arg);
   Arg		arg;
 }		Key;
+
+/*
+** - Prototypes ---------------------------------------------------------------
+** ----------------------------------------------------------------------------
+*/
+
+void		keypress(Wm *wm, XEvent *event);
+void		spawn(const Arg *arg);
 
 #endif		/* !ZWM_H_ */
