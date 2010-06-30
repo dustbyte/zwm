@@ -17,10 +17,10 @@ Wm		wm;
 
 static void	(*handlers[LASTEvent])(XEvent *event) =
 {
-  [KeyPress] = NULL;
-  [MapRequest] = NULL;
-  [DestroyNotify] = NULL;
-  [ConfigureNotify] = NULL;
+  [KeyPress] = NULL,
+  [MapRequest] = NULL,
+  [DestroyNotify] = NULL,
+  [ConfigureNotify] = NULL
 };
 
 void		finish_wm(Wm *wm)
@@ -32,9 +32,9 @@ void		run_wm(Wm *wm)
 {
   XEvent	event;
 
-  while (wm->is_running && !XNextEvent(&event))
+  while (wm->is_running && !XNextEvent(wm->dpy, &event))
     if (handlers[event.type])
-      handlers[event.type](&event)
+      handlers[event.type](&event);
 }
 
 void		init_wm(Wm *wm)
