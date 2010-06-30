@@ -50,7 +50,12 @@ void		map_request(Wm *wm, XEvent *event)
 
 void		destroy_notify(Wm *wm, XEvent *event)
 {
-  remove_window(wm, event->xdestroywindow.window);
+  Client	*win;
+
+  if ((win = get_window(wm, event->xdestroywindow.window)) != NULL)
+    remove_window(wm, win);
+  else
+    wlog(RUN | WARN, "Window does not exists");
   tile(wm);
 }
 

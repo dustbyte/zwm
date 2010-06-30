@@ -25,12 +25,6 @@ typedef struct	_Workspace
   char		*repr;
 }		Workspace;
 
-typedef struct	_ZWindow
-{
-  t_elem	self;
-  Window	win;
-}		ZWindow;
-
 typedef struct	_Conf
 {
   double	master_width;
@@ -77,7 +71,8 @@ void		destroy_notify(Wm *wm, XEvent *event);
 */
 
 void		add_window(Wm *wm, Window window);
-void		remove_window(Wm *wm, Window window);
+void		remove_window(Wm *wm, Client *win);
+Client		*get_window(Wm *wm, Window window);
 
 /*
 ** Commands
