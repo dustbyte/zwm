@@ -1,13 +1,3 @@
-/*
-** list_search.c for src in /afs/epitech.net/users/epitech_2013/appere_n/cu/projets/zappy/server/libs/lists/src
-**
-** Made by pierre wacrenier
-** Login   <wacren_p@epitech.net>
-**
-** Started on  Sat Jun 12 17:08:25 2010 pierre wacrenier
-** Last update Tue Jun 15 18:05:06 2010 nathan appere
-*/
-
 #include <stdlib.h>
 
 #include "lists.h"

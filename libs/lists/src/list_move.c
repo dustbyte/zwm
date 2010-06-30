@@ -1,13 +1,3 @@
-/*
-** list_move.c for src in /usr/home/me/projets/zappy/server/libs/lists/src
-**
-** Made by pierre wacrenier
-** Login   <wacren_p@epitech.net>
-**
-** Started on  Thu Jun 17 02:09:13 2010 pierre wacrenier
-** Last update Fri Jun 25 14:31:23 2010 nathan appere
-*/
-
 #include <assert.h>
 #include <stdlib.h>
 

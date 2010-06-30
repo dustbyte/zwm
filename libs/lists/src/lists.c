@@ -1,13 +1,3 @@
-/*
-** lists.c for src in /usr/home/me/projets/zappy/server/libs/lists/src
-**
-** Made by pierre wacrenier
-** Login   <wacren_p@epitech.net>
-**
-** Started on  Wed Jun  9 13:20:39 2010 pierre wacrenier
-** Last update Fri Jun 25 13:41:28 2010 nathan appere
-*/
-
 #include <stdlib.h>
 #include <stdio.h>
 

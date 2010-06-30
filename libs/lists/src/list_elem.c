@@ -1,13 +1,3 @@
-/*
-** list_elem.c for src in /home/mota/projets/tek2/zappy/server/libs/lists/src
-**
-** Made by pierre wacrenier
-** Login   <wacren_p@epitech.net>
-**
-** Started on  Sat Jun 12 15:49:04 2010 pierre wacrenier
-** Last update Fri Jun 18 17:35:27 2010 pierre wacrenier
-*/
-
 #include <stdlib.h>
 #include <stdio.h>
 

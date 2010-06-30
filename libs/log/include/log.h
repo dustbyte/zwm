@@ -1,13 +1,3 @@
-/*
-** log.h for include in /afs/epitech.net/users/epitech_2013/appere_n/cu/projets/zappy/server/libs/log/include
-**
-** Made by pierre wacrenier
-** Login   <wacren_p@epitech.net>
-**
-** Started on  Mon Jun 14 18:13:19 2010 pierre wacrenier
-** Last update Wed Jun 30 17:30:28 2010 pierre wacrenier
-*/
-
 #ifndef		LOG_H_
 # define	LOG_H_
 
@@ -16,7 +6,7 @@
 */
 
 #define		LOGBSIZE	1024
-#define		PROGNAME	"zappy"
+#define		PROGNAME	"zwm"
 
 /*
 ** Il faut juste eviter les collisions entre e_loglvl et e_logtype

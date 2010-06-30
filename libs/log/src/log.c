@@ -1,13 +1,3 @@
-/*
-** log.c for src in /afs/epitech.net/users/epitech_2013/appere_n/cu/projets/zappy/server/libs/log/src
-**
-** Made by pierre wacrenier
-** Login   <wacren_p@epitech.net>
-**
-** Started on  Mon Jun 14 18:14:08 2010 pierre wacrenier
-** Last update Wed Jun 30 17:30:53 2010 pierre wacrenier
-*/
-
 #include <errno.h>
 #include <stdarg.h>
 

@@ -1,13 +1,3 @@
-/*
-** list_deletion.c for src in /usr/home/me/projets/zappy/server/libs/lists/src
-**
-** Made by pierre wacrenier
-** Login   <wacren_p@epitech.net>
-**
-** Started on  Wed Jun  9 18:38:29 2010 pierre wacrenier
-** Last update Fri Jun 25 14:37:08 2010 nathan appere
-*/
-
 #include <stdlib.h>
 
 #include "lists.h"

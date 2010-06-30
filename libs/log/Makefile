@@ -1,13 +1,3 @@
-##
-## Makefile for zappy in /home/mota/projets/tek2/zappy/server/log
-##
-## Made by pierre wacrenier
-## Login   <wacren_p@epitech.net>
-##
-## Started on  Mon Jun  7 16:13:16 2010 pierre wacrenier
-## Last update Mon Jun 14 18:14:37 2010 pierre wacrenier
-##
-
 TYPE		=	$(shell uname -s)
 TYPE		!=	uname -s
 

@@ -1,13 +1,3 @@
-/*
-** list_insertion.c for src in /home/mota/projets/tek2/zappy/server/libs/lists/src
-**
-** Made by pierre wacrenier
-** Login   <wacren_p@epitech.net>
-**
-** Started on  Wed Jun  9 18:38:29 2010 pierre wacrenier
-** Last update Fri Jun 18 19:13:28 2010 Pierre Wacrenier
-*/
-
 #include <stdlib.h>
 #include <stdio.h>
 

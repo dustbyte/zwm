@@ -1,13 +1,3 @@
-/*
-** lists.h for include in /usr/home/me/projets/zappy/server/libs/lists/include
-**
-** Made by pierre wacrenier
-** Login   <wacren_p@epitech.net>
-**
-** Started on  Wed Jun  9 13:20:55 2010 pierre wacrenier
-** Last update Fri Jun 25 14:37:17 2010 nathan appere
-*/
-
 #ifndef		LISTS_H_
 # define	LISTS_H_
 

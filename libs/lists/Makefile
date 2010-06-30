@@ -1,13 +1,3 @@
-##
-## Makefile for lists in /afs/epitech.net/users/epitech_2013/appere_n/cu/projets/zappy/server/libs/lists
-##
-## Made by pierre wacrenier
-## Login   <wacren_p@epitech.net>
-##
-## Started on  Mon Jun  7 16:13:16 2010 pierre wacrenier
-## Last update Tue Jun 15 23:56:28 2010 pierre wacrenier
-##
-
 TYPE		=	$(shell uname -s)
 TYPE		!=	uname -s
 
