@@ -49,13 +49,6 @@ typedef struct		s_err_type
 
 # define	DFL_LOG_LVL	INFO
 
-/*
-** # define	DFL_LOG_LVL	SYS_WARN
-**
-** # define	ERR_SET		SYS_ERR | NET_ERR
-** # define	WARN_SET	NET_WARN | SYS_WARN
-*/
-
 # define	ERR_FORMAT_MAX	(sizeof(err_format) / sizeof(*err_format))
 # define	ERR_FORMAT_DEFAULT	1
 # define	ERR_TYPE_MAX	(sizeof(err_type) / sizeof(*err_type))
