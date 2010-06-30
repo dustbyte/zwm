@@ -15,9 +15,26 @@
 
 Wm		wm;
 
+static void	(*handlers[LASTEvent])(XEvent *event) =
+{
+  [KeyPress] = NULL;
+  [MapRequest] = NULL;
+  [DestroyNotify] = NULL;
+  [ConfigureNotify] = NULL;
+};
+
 void		finish_wm(Wm *wm)
 {
   XCloseDisplay(wm->dpy);
+}
+
+void		run_wm(Wm *wm)
+{
+  XEvent	event;
+
+  while (wm->is_running && !XNextEvent(&event))
+    if (handlers[event.type])
+      handlers[event.type](&event)
 }
 
 void		init_wm(Wm *wm)

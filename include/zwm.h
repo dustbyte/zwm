@@ -34,6 +34,7 @@ typedef struct	_Wm
   Display	*dpy;
   int		screen;
   Window	root;
+  Bool		is_running;
 }		Wm;
 
 typedef union	_Arg
