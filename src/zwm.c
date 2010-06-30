@@ -41,11 +41,16 @@ void		key_press(Wm *wm, XEvent *event)
       keys[i].func(&keys[i].arg);
 }
 
-
 void		map_request(Wm *wm, XEvent *event)
 {
   add_window(wm, event->xmaprequest.window);
   XMapWindow(wm->dpy, event->xmaprequest.window);
+  tile(wm);
+}
+
+void		destroy_notify(Wm *wm, XEvent *event)
+{
+  remove_window(wm, event->xdestroywindow.window);
   tile(wm);
 }
 
