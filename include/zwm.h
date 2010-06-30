@@ -4,11 +4,6 @@
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
 
-typedef enum {
-  ZFalse = 0,
-  ZTrue = 1
-}		ZBool;
-
 #define	TABLELENGTH(X) (sizeof((X)) / sizeof(*(X)))
 
 typedef struct _Client
@@ -37,6 +32,8 @@ typedef struct	_Wm
   Workspace	*workspaces;
   Conf		*conf;
   Display	*dpy;
+  int		screen;
+  Window	root;
 }		Wm;
 
 typedef union	_Arg

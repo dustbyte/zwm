@@ -9,6 +9,12 @@
 #include "zwm.h"
 #include "config.h"
 
+/*
+** Globals
+*/
+
+Wm		wm;
+
 void		finish_wm(Wm *wm)
 {
   XCloseDisplay(wm->dpy);
@@ -23,12 +29,12 @@ void		init_wm(Wm *wm)
     wlog(XLIB | ERR, "Cannot open display");
   else
     wlog(XLIB | INFO, "Display Opened");
+  wm->screen = DefaultScreen(wm->dpy);
+  wm->root = RootWindow(wm->dpy, wm->screen);
 }
 
 int		main(void)
 {
-  Wm		wm;
-
   init_wm(&wm);
   finish_wm(&wm);
   return (0);
