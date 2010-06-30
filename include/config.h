@@ -6,7 +6,7 @@
 
 #define ModKey Mod4Mask
 
-#define	SET_WORKSPACE(X) {{0, NULL, NULL}, NULL, (X)}
+#define	SET_WORKSPACE(X) {{0, NULL, NULL}, 1, false, NULL, (X)}
 
 Workspace	workspaces[] =
   {

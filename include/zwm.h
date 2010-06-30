@@ -1,6 +1,8 @@
 #ifndef		ZWM_H_
 # define	ZWM_H_
 
+#include <stdbool.h>
+
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
 
@@ -15,6 +17,8 @@ typedef struct _Client
 typedef struct	_Workspace
 {
   t_list	windows;
+  int		master_size;
+  Bool		stacked;
   Client	*focus;
   char		*repr;
 }		Workspace;
