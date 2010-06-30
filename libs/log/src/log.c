@@ -25,7 +25,8 @@ static const t_err_type		err_type[] =
 {
   {SYS,		"system"	},
   {NET,		"network"	},
-  {PROG,	"prog"		}
+  {XLIB,	"Xlib"		},
+  {RUN,		"run"		}
 };
 
 static void	init(void)
@@ -80,7 +81,9 @@ int		wlog(t_loglvl lvl, const char *fmt, ...)
   va_start(ap, fmt);
   raw_log(lvl, fmt, ap);
   va_end(ap);
-  if (lvl & (ERR | WARN))
+  if (lvl & ERR)
+    exit(EXIT_FAILURE);
+  else if (lvl & WARN)
     return (-1);
   return (0);
 }

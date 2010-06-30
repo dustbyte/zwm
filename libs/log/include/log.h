@@ -23,7 +23,8 @@ typedef enum		e_logtype
 {
   SYS = 0x100,
   NET = 0x200,
-  PROG = 0x400
+  XLIB = 0x400,
+  RUN = 0x800
 }			t_logtype;
 
 typedef struct		s_log
