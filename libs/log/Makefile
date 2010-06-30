@@ -1,47 +1,54 @@
+##
+## Makefile for zappy in /home/mota/projets/tek2/zappy/server/log
+##
+## Made by pierre wacrenier
+## Login   <wacren_p@epitech.net>
+##
+## Started on  Mon Jun  7 16:13:16 2010 pierre wacrenier
+## Last update Mon Jun 14 18:14:37 2010 pierre wacrenier
+##
+
 TYPE		=	$(shell uname -s)
 TYPE		!=	uname -s
 
-NAME		=	zwm
+NAME		=	liblog.a
 
 CC		=	gcc
-CD		=	cd
-MAKE		=	make
-CP		=	cp -r
+AR		=	ar rcs
+RANLIB		=	ranlib
+
 RM		=	rm -rf
 FIND		=	find
 
-CFLAGS		+=	-O2 -Werror -DNDEBUG
-#CFLAGS		=	-g3
+CFLAGS		+=	-O2 -Werror
+CFLAGS		=	-g3
 CFLAGS		+=	-W -Wall -ansi -pedantic
 CFLAGS		+=	-D${TYPE} -D_REENTRANT -D__EXTENSIONS__
 CFLAGS		+=	-D_POSIX_PTHREAD_SEMANTICS -D_BSD_SOURCE -D_GNU_SOURCE
 
-CFLAGS		+=	-I$(HDRDIR) -I/usr/X11R6/include
+CFLAGS		+=	-I$(HDRDIR)
 
-LDFLAGS		=	-L/usr/X11R6/lib -lX11
+LDFLAGS		=
 
 SRCDIR		=	src
 HDRDIR		=	include
 
-
-SRCS		=
+SRCS		=	$(SRCDIR)/log.c
 
 OBJS		=	$(SRCS:.c=.o)
 
 HDRS		=
 
 $(NAME):		$(SRCS) $(OBJS) $(HDRS)
-			$(CC) $(OBJS) -o $(NAME) $(LDFLAGS)
+			$(AR) $(NAME) $(OBJS)
 
 all:			$(NAME)
 
 clean:
 			$(RM) $(OBJS)
-			$(RM) $(LIBDIR)/*.a
 			$(FIND) . -name "*~" -print -exec rm -f {} \;
 			$(FIND) . -name "*\#*" -print -exec rm -f {} \;
 			$(RM) $(NAME).core
-			$(RM) vgcore*
 
 fclean:			clean
 			$(RM) $(NAME)
@@ -49,7 +56,12 @@ fclean:			clean
 
 mrproper:		$(NAME) clean
 
+armageddon:		$(RM) $(SRCDIR) $(HDRDIR)
+
 re:			fclean $(NAME)
+
+tags:
+			etags `find . -name "*.[ch]"`
 
 .c.o:
 			$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@

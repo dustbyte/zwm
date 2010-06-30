@@ -1,0 +1,77 @@
+/*
+** log.h for include in /afs/epitech.net/users/epitech_2013/appere_n/cu/projets/zappy/server/libs/log/include
+**
+** Made by pierre wacrenier
+** Login   <wacren_p@epitech.net>
+**
+** Started on  Mon Jun 14 18:13:19 2010 pierre wacrenier
+** Last update Wed Jun 30 17:30:28 2010 pierre wacrenier
+*/
+
+#ifndef		LOG_H_
+# define	LOG_H_
+
+/*
+** t_log gl_log
+*/
+
+#define		LOGBSIZE	1024
+#define		PROGNAME	"zappy"
+
+/*
+** Il faut juste eviter les collisions entre e_loglvl et e_logtype
+*/
+
+typedef enum		e_loglvl
+{
+  INFO = 0x4,
+  WARN = 0x2,
+  ERR = 0x1
+}			t_loglvl;
+
+typedef enum		e_logtype
+{
+  SYS = 0x100,
+  NET = 0x200,
+  PROG = 0x400
+}			t_logtype;
+
+typedef struct		s_log
+{
+  FILE			*log_out;
+  FILE			*log_err;
+  unsigned int		max_log_lvl;
+}			t_log;
+
+typedef struct		s_err_format
+{
+  const unsigned short	type;
+  const unsigned short	err;
+  const char		*str;
+  FILE			**output;
+}			t_err_format;
+
+typedef struct		s_err_type
+{
+  const unsigned int	type;
+  const char		*str;
+}			t_err_type;
+
+# define	DFL_LOG_LVL	INFO
+
+/*
+** # define	DFL_LOG_LVL	SYS_WARN
+**
+** # define	ERR_SET		SYS_ERR | NET_ERR
+** # define	WARN_SET	NET_WARN | SYS_WARN
+*/
+
+# define	ERR_FORMAT_MAX	(sizeof(err_format) / sizeof(*err_format))
+# define	ERR_FORMAT_DEFAULT	1
+# define	ERR_TYPE_MAX	(sizeof(err_type) / sizeof(*err_type))
+# define	ERR_TYPE_DEFAULT	0
+
+int		wlog(t_loglvl lvl, const char *str, ...);
+void		*wlog_p(t_loglvl lvl, const char *str, ...);
+
+#endif		/* !LOG_H_ */
