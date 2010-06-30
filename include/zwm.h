@@ -6,6 +6,8 @@
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
 
+#include "lists.h"
+
 #define	TABLELENGTH(X) (sizeof((X)) / sizeof(*(X)))
 
 typedef struct _Client
@@ -45,7 +47,7 @@ typedef struct	_Wm
   int		screen;
   Window	root;
   Bool		is_running;
-  
+
 }		Wm;
 
 typedef union	_Arg
@@ -66,6 +68,7 @@ typedef struct	_Key
 ** Handlers
 */
 
+void		key_press(Wm *wm, XEvent *event);
 void		map_request(Wm *wm, XEvent *event);
 
 /*
@@ -73,5 +76,11 @@ void		map_request(Wm *wm, XEvent *event);
 */
 
 void		add_window(Wm *wm, Window window);
+
+/*
+** Commands
+*/
+
+void		spawn(const Arg *arg);
 
 #endif		/* !ZWM_H_ */

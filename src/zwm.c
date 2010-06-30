@@ -5,7 +5,6 @@
 #include <X11/keysym.h>
 
 #include "log.h"
-#include "lists.h"
 #include "zwm.h"
 #include "config.h"
 
@@ -17,7 +16,7 @@ Wm		wm;
 
 static void	(*handlers[LASTEvent])(Wm *wm, XEvent *event) =
 {
-  [KeyPress] = NULL,
+  [KeyPress] = key_press,
   [MapRequest] = map_request,
   [DestroyNotify] = NULL,
   [ConfigureNotify] = NULL
@@ -27,6 +26,21 @@ void		tile(Wm *wm)
 {
   (void)wm;
 }
+
+void		key_press(Wm *wm, XEvent *event)
+{
+  unsigned	i;
+  KeySym	keysym;
+  XKeyEvent	keyevent;
+
+  keyevent = event->xkey;
+  keysym = XKeycodeToKeysym(wm->dpy, keyevent.keycode, 0);
+
+  for (i = 0; i < TABLELENGTH(keys); ++i)
+    if (keys[i].keysym == keysym && keys[i].mod == keyevent.state)
+      keys[i].func(&keys[i].arg);
+}
+
 
 void		map_request(Wm *wm, XEvent *event)
 {

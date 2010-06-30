@@ -32,8 +32,9 @@ LDFLAGS		=	-L/usr/X11R6/lib -lX11 -L$(LIBDIR) -llog -llists			\
 SRCDIR		=	src
 HDRDIR		=	include
 
-SRCS		=	$(SRCDIR)/tools.c	\
-			$(SRCDIR)/windows.c	\
+SRCS		=	$(SRCDIR)/commands/spawn.c	\
+			$(SRCDIR)/tools.c		\
+			$(SRCDIR)/windows.c		\
 			$(SRCDIR)/zwm.c
 
 OBJS		=	$(SRCS:.c=.o)
