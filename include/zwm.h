@@ -79,5 +79,6 @@ Client		*get_window(Wm *wm, Window window);
 */
 
 void		spawn(const Arg *arg);
+void		quit(const Arg *arg);
 
 #endif		/* !ZWM_H_ */

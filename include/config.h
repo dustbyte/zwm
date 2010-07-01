@@ -30,10 +30,12 @@ Conf		conf =
   };
 
 const char *xtermcmd[] = {"xterm", NULL};
+const char *xtrlockcmd[] = {"xtrlock", NULL};
 
 const Key keys[] =
 {
   {ModKey,		XK_Return,	spawn,	{.args = xtermcmd}	},
+  {ModKey|ShiftMask,	XK_e,		quit,	{0}			},
   {ModKey,		XK_h,		NULL,	{.val = -1}		}
 };
 
