@@ -20,7 +20,7 @@ void		layout_tile(Wm *wm)
   cwrksp = &wm->workspaces[wm->cwrksp];
   num_master = cwrksp->windows.size <= cwrksp->master_size ?
     cwrksp->windows.size : cwrksp->windows.size - (cwrksp->windows.size - cwrksp->master_size);
-  if (num_master <= cwrksp->master_size)
+  if (num_master && num_master <= cwrksp->master_size)
     {
       y = 0;
       win_height = wm->scr_height / num_master;
@@ -31,7 +31,7 @@ void		layout_tile(Wm *wm)
 	  y += win_height;
 	}
     }
-  else
+  else if (num_master)
     {
       i = 1;
       y = 0;
@@ -60,5 +60,4 @@ void		layout_tile(Wm *wm)
 	  ++i;
 	}
     }
-
 }

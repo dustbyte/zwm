@@ -1,3 +1,7 @@
+#include <signal.h>
+#include <sys/wait.h>
+#include <unistd.h>
+
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -20,8 +24,8 @@ static void	(*handlers[LASTEvent])(Wm *wm, XEvent *event) =
 {
   [KeyPress] = key_press,
   [MapRequest] = map_request,
-  [DestroyNotify] = NULL,
-  [ConfigureNotify] = NULL
+  [DestroyNotify] = destroy_notify,
+  /* [ConfigureNotify] = NULL */
 };
 
 void		draw(Wm *wm)
@@ -30,6 +34,7 @@ void		draw(Wm *wm)
   Client	*client;
   Workspace	*cur = &wm->workspaces[wm->cwrksp];
 
+  wlog(RUN | WARN, "DRAW");
   cur->layout->func(wm);
   list_foreach_as(cur->windows.head, tmp, (Client *), client)
     {
@@ -61,6 +66,7 @@ void		key_press(Wm *wm, XEvent *event)
 
 void		map_request(Wm *wm, XEvent *event)
 {
+  wlog(RUN | WARN, "MAPREQUEST");
   add_window(wm, event->xmaprequest.window);
   XMapWindow(wm->dpy, event->xmaprequest.window);
   draw(wm);
@@ -73,7 +79,7 @@ void		destroy_notify(Wm *wm, XEvent *event)
   if ((win = get_window(wm, event->xdestroywindow.window)) != NULL)
     remove_window(wm, win);
   else
-    wlog(RUN | WARN, "Window does not exists");
+    wlog(RUN | WARN, "Destroy: Window does not exists");
   draw(wm);
 }
 
@@ -103,14 +109,19 @@ void		finish_wm(Wm *wm)
   XCloseDisplay(wm->dpy);
 }
 
+void sigchld(__attribute__((unused))int unused) {
+  if(signal(SIGCHLD, sigchld) == SIG_ERR)
+    wlog(SYS|ERR, "Can't install SIGCHLD handler");
+  while(0 < waitpid(-1, NULL, WNOHANG));
+}
+
 void		init_wm(Wm *wm)
 {
+  sigchld(0);
   wm->is_running = true;
   wm->cwrksp = 0;
   wm->workspaces = workspaces;
   wm->conf = &conf;
-  wm->colors.focus = get_color(conf.border_focus, wm);
-  wm->colors.unfocus = get_color(conf.border_unfocus, wm);
   if ((wm->dpy = XOpenDisplay(NULL)) == NULL)
     wlog(XLIB | ERR, "Cannot open display");
   else
@@ -119,7 +130,12 @@ void		init_wm(Wm *wm)
   wm->root = RootWindow(wm->dpy, wm->screen);
   wm->scr_width = DisplayWidth(wm->dpy, wm->screen);
   wm->scr_height = DisplayHeight(wm->dpy, wm->screen);
+  wm->colors.focus = get_color(conf.border_focus, wm);
+  wm->colors.unfocus = get_color(conf.border_unfocus, wm);
   grab_keys(wm);
+  /* XSelectInput(wm->dpy, wm->root, SubstructureNotifyMask); */
+  XSelectInput(wm->dpy, wm->root, SubstructureRedirectMask);
+  XSync(wm->dpy, False);
 }
 
 int		main(void)
