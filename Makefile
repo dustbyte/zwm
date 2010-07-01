@@ -33,6 +33,7 @@ SRCDIR		=	src
 HDRDIR		=	include
 
 SRCS		=	$(SRCDIR)/commands/spawn.c	\
+			$(SRCDIR)/layouts/tile.c	\
 			$(SRCDIR)/tools.c		\
 			$(SRCDIR)/windows.c		\
 			$(SRCDIR)/zwm.c
