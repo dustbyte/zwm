@@ -32,12 +32,12 @@ LDFLAGS		=	-L/usr/X11R6/lib -lX11 -L$(LIBDIR) -llog -llists			\
 SRCDIR		=	src
 HDRDIR		=	include
 
-
 SRCS		=	$(SRCDIR)/commands/move_focus.c		\
 			$(SRCDIR)/commands/quit.c		\
 			$(SRCDIR)/commands/resize.c		\
 			$(SRCDIR)/commands/spawn.c		\
 			$(SRCDIR)/commands/switch_layout.c	\
+			$(SRCDIR)/commands/zoom.c		\
 			$(SRCDIR)/layouts/monocle.c		\
 			$(SRCDIR)/layouts/tile.c		\
 			$(SRCDIR)/tools.c			\

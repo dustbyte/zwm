@@ -10,7 +10,7 @@ extern Wm	wm;
 void		move_focus(const Arg *arg)
 {
   int		val = arg->val;
-  Workspace	*cur= &wm.workspaces[wm.cwrksp];
+  Workspace	*cur = &wm.workspaces[wm.cwrksp];
   t_list	*clients = &cur->windows;
 
   if (clients->size > 0)

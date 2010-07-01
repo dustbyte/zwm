@@ -106,6 +106,7 @@ void		spawn(const Arg *arg);
 void		quit(const Arg *arg);
 void		move_focus(const Arg *arg);
 void		switch_layout(const Arg *arg);
+void		zoom(const Arg *arg);
 
 /*
 ** Layouts
