@@ -54,6 +54,7 @@ const Key keys[] =
   {ModKey,		XK_h,		resize,		{.dval = -0.05}		},
   {ModKey,		XK_l,		resize,		{.dval = 0.05}		},
   {ModKey,		XK_space,	zoom,		{0}			},
+  {ModKey|ShiftMask,	XK_q,		kill_client,	{0}			},
 };
 
 #endif		/* !CONFIG_H_ */
