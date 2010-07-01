@@ -19,7 +19,7 @@ void		layout_tile(Wm *wm)
 
   cwrksp = &wm->workspaces[wm->cwrksp];
   num_master = cwrksp->windows.size <= cwrksp->master_size ?
-    cwrksp->windows.size : cwrksp->windows.size - (cwrksp->windows.size - cwrksp->master_size);
+    cwrksp->windows.size : cwrksp->master_size;
   wlog(RUN | INFO, "WIN NBR = %d || NUM MASTER = %d", cwrksp->windows.size, num_master);
   if (num_master && cwrksp->windows.size <= cwrksp->master_size)
     {
@@ -34,28 +34,28 @@ void		layout_tile(Wm *wm)
     }
   else if (num_master)
     {
-      i = 1;
+      i = 0;
       y = 0;
-      win_height = wm->scr_height / num_master;
       win_width = wm->scr_width * wm->conf->master_width;
+      win_height = wm->scr_height / num_master;
       wlog(RUN|INFO, "WIN WIDTH = %d", win_width);
       list_foreach_as(cwrksp->windows.head, tmp, (Client *), client)
 	{
-	  if (i <= num_master)
+	  if (i < num_master)
 	    {
-	      XMoveResizeWindow(wm->dpy, cwrksp->focus->win, 0, y,
+	      XMoveResizeWindow(wm->dpy, client->win, 0, y,
 				win_width - 2, win_height - 2);
 	    }
 	  else
 	    {
-	      if (i == num_master + 1)
+	      if (i == num_master)
 		{
 		  x = win_width;
 		  y = 0;
 		  win_height = wm->scr_height / (cwrksp->windows.size - num_master);
 		  win_width = wm->scr_width - win_width;
 		}
-	      XMoveResizeWindow(wm->dpy, cwrksp->focus->win, x, y,
+	      XMoveResizeWindow(wm->dpy, client->win, x, y,
 				win_width - 2, win_height - 2);
 	    }
 	  y += win_height;
