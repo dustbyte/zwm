@@ -4,8 +4,10 @@
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
 
+#include "lists.h"
 #include "log.h"
 #include "zwm.h"
+#include "tools.h"
 #include "config.h"
 
 /*
@@ -22,9 +24,25 @@ static void	(*handlers[LASTEvent])(Wm *wm, XEvent *event) =
   [ConfigureNotify] = NULL
 };
 
-void		tile(Wm *wm)
+void		draw(Wm *wm)
 {
-  (void)wm;
+  t_elem	*tmp;
+  Client	*client;
+  Workspace	*cur = &wm->workspaces[wm->cwrksp];
+
+  cur->layout->func(wm);
+  list_foreach_as(cur->windows.head, tmp, (Client *), client)
+    {
+      if (client == cur->focus)
+	{
+	  XSetWindowBorderWidth(wm->dpy, client->win, 1);
+	  XSetWindowBorder(wm->dpy, client->win, wm->colors.focus);
+	  XSetInputFocus(wm->dpy,client->win,RevertToParent,CurrentTime);
+	  XRaiseWindow(wm->dpy,client->win);
+	}
+      else
+	  XSetWindowBorder(wm->dpy, client->win, wm->colors.unfocus);
+    }
 }
 
 void		key_press(Wm *wm, XEvent *event)
@@ -45,7 +63,7 @@ void		map_request(Wm *wm, XEvent *event)
 {
   add_window(wm, event->xmaprequest.window);
   XMapWindow(wm->dpy, event->xmaprequest.window);
-  tile(wm);
+  draw(wm);
 }
 
 void		destroy_notify(Wm *wm, XEvent *event)
@@ -56,7 +74,7 @@ void		destroy_notify(Wm *wm, XEvent *event)
     remove_window(wm, win);
   else
     wlog(RUN | WARN, "Window does not exists");
-  tile(wm);
+  draw(wm);
 }
 
 void		run_wm(Wm *wm)
@@ -88,9 +106,11 @@ void		finish_wm(Wm *wm)
 void		init_wm(Wm *wm)
 {
   wm->is_running = true;
-  wm->cur_workspace = 0;
+  wm->cwrksp = 0;
   wm->workspaces = workspaces;
   wm->conf = &conf;
+  wm->colors.focus = get_color(conf.border_focus, wm);
+  wm->colors.unfocus = get_color(conf.border_unfocus, wm);
   if ((wm->dpy = XOpenDisplay(NULL)) == NULL)
     wlog(XLIB | ERR, "Cannot open display");
   else

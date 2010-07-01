@@ -6,7 +6,14 @@
 
 #define ModKey Mod4Mask
 
-#define	SET_WORKSPACE(X) {{0, NULL, NULL}, 1, false, NULL, (X)}
+Layout		layouts[] =
+  {
+    {"[]=",	NULL	},
+    {"[O]",	NULL	},
+    {"[]~",	NULL	}
+  };
+
+#define	SET_WORKSPACE(X) {{0, NULL, NULL}, 1, false, NULL, (X), &layouts[0]}
 
 Workspace	workspaces[] =
   {
@@ -30,11 +37,12 @@ Conf		conf =
   };
 
 const char *xtermcmd[] = {"xterm", NULL};
-const char *xtrlockcmd[] = {"xtrlock", NULL};
+const char *dmenucmd[] = {"dmenu_run", NULL};
 
 const Key keys[] =
 {
   {ModKey,		XK_Return,	spawn,	{.args = xtermcmd}	},
+  {ModKey,		XK_a,		spawn,	{.args = dmenucmd}	},
   {ModKey|ShiftMask,	XK_e,		quit,	{0}			},
   {ModKey,		XK_h,		NULL,	{.val = -1}		}
 };
