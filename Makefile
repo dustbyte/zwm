@@ -40,6 +40,7 @@ SRCS		=	$(SRCDIR)/commands/change_desktop.c	\
 			$(SRCDIR)/commands/spawn.c		\
 			$(SRCDIR)/commands/switch_layout.c	\
 			$(SRCDIR)/commands/zoom.c		\
+			$(SRCDIR)/commands/master_size.c	\
 			$(SRCDIR)/layouts/monocle.c		\
 			$(SRCDIR)/layouts/tile.c		\
 			$(SRCDIR)/tools.c			\

@@ -23,10 +23,10 @@ void		layout_tile(Wm *wm)
   if (num_master && cwrksp->windows.size <= cwrksp->master_size)
     {
       y = 0;
-      win_height = wm->scr_height / num_master;
+      win_height = wm->scr_height / cwrksp->windows.size;
       list_foreach_as(cwrksp->windows.head, tmp, (Client *), client)
 	{
-	  XMoveResizeWindow(wm->dpy, cwrksp->focus->win, 0, y,
+	  XMoveResizeWindow(wm->dpy, client->win, 0, y,
 			    wm->scr_width - 2, win_height - 2);
 	  y += win_height;
 	}
