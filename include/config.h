@@ -8,9 +8,9 @@
 
 Layout		layouts[] =
   {
-    {"[]=",	NULL	},
-    {"[O]",	NULL	},
-    {"[]~",	NULL	}
+    {"[]=",	layout_tile	},
+    {"[O]",	NULL		},
+    {"[]~",	NULL		}
   };
 
 #define	SET_WORKSPACE(X) {{0, NULL, NULL}, 1, false, NULL, (X), &layouts[0]}

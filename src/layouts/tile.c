@@ -1,13 +1,64 @@
+#include <stdlib.h>
+#include <stdio.h>
+
+#include "log.h"
+#include "lists.h"
 #include "zwm.h"
 
 void		layout_tile(Wm *wm)
 {
-  int		master_width;
-  Workspace	*c_workspace;
+  unsigned int	i;
+  unsigned int	x;
+  unsigned int	y;
+  unsigned int	win_height;
+  unsigned int	win_width;
+  t_elem	*tmp;
+  Client	*client;
+  Workspace	*cwrksp;
+  unsigned int	num_master;
 
-  workspace = &wm->workspaces[cwrksp];
-  if (c_workspace->windows.size == 1)
+  cwrksp = &wm->workspaces[wm->cwrksp];
+  num_master = cwrksp->windows.size <= cwrksp->master_size ?
+    cwrksp->windows.size : cwrksp->windows.size - (cwrksp->windows.size - cwrksp->master_size);
+  if (num_master <= cwrksp->master_size)
     {
-      XMoveResizeWindow(wm->dpy, c_workspace->focus->win, 0, 0,c);
+      y = 0;
+      win_height = wm->scr_height / num_master;
+      list_foreach_as(cwrksp->windows.head, tmp, (Client *), client)
+	{
+	  XMoveResizeWindow(wm->dpy, cwrksp->focus->win, 0, y,
+			    wm->scr_width - 2, win_height - 2);
+	  y += win_height;
+	}
     }
+  else
+    {
+      i = 1;
+      y = 0;
+      win_height = wm->scr_height / num_master;
+      win_width = wm->scr_width * wm->conf->master_width;
+      list_foreach_as(cwrksp->windows.head, tmp, (Client *), client)
+	{
+	  if (i <= num_master)
+	    {
+	      XMoveResizeWindow(wm->dpy, cwrksp->focus->win, 0, y,
+				win_width - 2, win_height - 2);
+	    }
+	  else
+	    {
+	      if (i == num_master + 1)
+		{
+		  x = win_width;
+		  y = 0;
+		  win_height = wm->scr_height / (cwrksp->windows.size - num_master);
+		  win_width = wm->scr_width - win_width;
+		}
+	      XMoveResizeWindow(wm->dpy, cwrksp->focus->win, x, y,
+				win_width - 2, win_height - 2);
+	    }
+	  y += win_height;
+	  ++i;
+	}
+    }
+
 }

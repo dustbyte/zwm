@@ -19,7 +19,7 @@ typedef struct		_Client
 typedef struct		_Workspace
 {
   t_list		windows;
-  int			master_size;
+  unsigned int		master_size;
   Bool			stacked;
   Client		*focus;
   char			*repr;
@@ -48,6 +48,8 @@ typedef struct		_Wm
   Display		*dpy;
   int			screen;
   Window		root;
+  int			scr_width;
+  int			scr_height;
   Bool			is_running;
 }			Wm;
 
@@ -93,5 +95,11 @@ Client		*get_window(Wm *wm, Window window);
 
 void		spawn(const Arg *arg);
 void		quit(const Arg *arg);
+
+/*
+** Layouts
+*/
+
+void		layout_tile(Wm *wm);
 
 #endif		/* !ZWM_H_ */

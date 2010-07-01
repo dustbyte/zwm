@@ -117,6 +117,8 @@ void		init_wm(Wm *wm)
     wlog(XLIB | INFO, "Display Opened");
   wm->screen = DefaultScreen(wm->dpy);
   wm->root = RootWindow(wm->dpy, wm->screen);
+  wm->scr_width = DisplayWidth(wm->dpy, wm->screen);
+  wm->scr_height = DisplayHeight(wm->dpy, wm->screen);
   grab_keys(wm);
 }
 
