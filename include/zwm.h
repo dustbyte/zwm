@@ -63,6 +63,7 @@ typedef struct		_Layout
 typedef union		_Arg
 {
   int			val;
+  double		dval;
   const void		*args;
 }			Arg;
 
@@ -101,6 +102,7 @@ Client		*get_window(Wm *wm, Window window);
 ** Commands
 */
 
+void		resize(const Arg *arg);
 void		spawn(const Arg *arg);
 void		quit(const Arg *arg);
 void		move_focus(const Arg *arg);
@@ -110,6 +112,7 @@ void		switch_layout(const Arg *arg);
 ** Layouts
 */
 
+void		draw(Wm *wm);
 void		layout_tile(Wm *wm);
 void		layout_monocle(Wm *wm);
 

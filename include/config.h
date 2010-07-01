@@ -36,7 +36,7 @@ Conf		conf =
     "#838383"
   };
 
-const char *xtermcmd[] = {"urxvt", NULL};
+const char *xtermcmd[] = {"rxvt", NULL};
 const char *dmenucmd[] = {"dmenu_run", NULL};
 
 const Key keys[] =
@@ -48,6 +48,8 @@ const Key keys[] =
   {ModKey,		XK_j,			move_focus,	{.val = +1}		},
   {ModKey,		XK_bracketright,	switch_layout,	{.val = +1}		},
   {ModKey,		XK_bracketleft,		switch_layout,	{.val = -1}		},
+  {ModKey,		XK_h,			resize,		{.dval = -0.05}		},
+  {ModKey,		XK_l,			resize,		{.dval = 0.05}		}
 };
 
 #endif		/* !CONFIG_H_ */
