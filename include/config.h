@@ -39,7 +39,8 @@ Conf		conf =
   };
 
 const char *xtermcmd[] = {"rxvt", NULL};
-const char *dmenucmd[] = {"dmenu_run", NULL};
+const char *dmenucmd[] =
+  {"dmenu_run", "-nb", "#252525", "-nf", "#e3e3e3", "-sb", "#1e5e8a"};
 
 const Key keys[] =
 {
