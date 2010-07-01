@@ -13,7 +13,10 @@ Layout		layouts[] =
     /* {"[]~",	NULL		} */
   };
 
-#define	SET_WORKSPACE(X) {{0, NULL, NULL}, 1, false, NULL, (X), 0}
+#define	MASTER_WIDTH	0.7
+#define	MASTER_SIZE	1
+
+#define	SET_WORKSPACE(X) {{0, NULL, NULL}, MASTER_SIZE, MASTER_WIDTH, NULL, (X), 0}
 
 Workspace	workspaces[] =
   {
@@ -31,7 +34,6 @@ Workspace	workspaces[] =
 
 Conf		conf =
   {
-    0.7,
     "#990000",
     "#838383"
   };

@@ -35,7 +35,7 @@ void		layout_tile(Wm *wm)
     {
       i = 0;
       y = 0;
-      win_width = wm->scr_width * wm->conf->master_width;
+      win_width = wm->scr_width * wm->workspaces[wm->cwrksp].master_width;
       win_height = wm->scr_height / num_master;
       list_foreach_as(cwrksp->windows.head, tmp, (Client *), client)
 	{

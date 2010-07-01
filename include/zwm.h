@@ -20,7 +20,7 @@ typedef struct		_Workspace
 {
   t_list		windows;
   unsigned int		master_size;
-  Bool			stacked;
+  double		master_width;
   Client		*focus;
   char			*repr;
   unsigned int		layout;
@@ -28,7 +28,6 @@ typedef struct		_Workspace
 
 typedef struct		_Conf
 {
-  double		master_width;
   char			*border_focus;
   char			*border_unfocus;
 }			Conf;
