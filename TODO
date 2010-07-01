@@ -1,4 +1,4 @@
--float ?
--tiling horizontal
--move
--multi-bureaux
+-float ?			[]
+-tiling horizontal		[]
+-move				[]
+-multi-bureaux			[]
