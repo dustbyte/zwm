@@ -32,10 +32,14 @@ LDFLAGS		=	-L/usr/X11R6/lib -lX11 -L$(LIBDIR) -llog -llists			\
 SRCDIR		=	src
 HDRDIR		=	include
 
-SRCS		=	$(SRCDIR)/commands/spawn.c	\
-			$(SRCDIR)/layouts/tile.c	\
-			$(SRCDIR)/tools.c		\
-			$(SRCDIR)/windows.c		\
+SRCS		=	$(SRCDIR)/commands/move_focus.c		\
+			$(SRCDIR)/commands/quit.c		\
+			$(SRCDIR)/commands/spawn.c		\
+			$(SRCDIR)/commands/switch_layout.c	\
+			$(SRCDIR)/layouts/monocle.c		\
+			$(SRCDIR)/layouts/tile.c		\
+			$(SRCDIR)/tools.c			\
+			$(SRCDIR)/windows.c			\
 			$(SRCDIR)/zwm.c
 
 OBJS		=	$(SRCS:.c=.o)

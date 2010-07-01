@@ -9,11 +9,11 @@
 Layout		layouts[] =
   {
     {"[]=",	layout_tile	},
-    {"[O]",	NULL		},
-    {"[]~",	NULL		}
+    {"[O]",	layout_monocle	},
+    /* {"[]~",	NULL		} */
   };
 
-#define	SET_WORKSPACE(X) {{0, NULL, NULL}, 1, false, NULL, (X), &layouts[0]}
+#define	SET_WORKSPACE(X) {{0, NULL, NULL}, 1, false, NULL, (X), 0}
 
 Workspace	workspaces[] =
   {
@@ -32,7 +32,7 @@ Workspace	workspaces[] =
 Conf		conf =
   {
     0.7,
-    "#ffffff",
+    "#990000",
     "#838383"
   };
 
@@ -41,10 +41,13 @@ const char *dmenucmd[] = {"dmenu_run", NULL};
 
 const Key keys[] =
 {
-  {ModKey,		XK_Return,	spawn,	{.args = xtermcmd}	},
-  {ModKey,		XK_a,		spawn,	{.args = dmenucmd}	},
-  {ModKey|ShiftMask,	XK_e,		quit,	{0}			},
-  {ModKey,		XK_h,		NULL,	{.val = -1}		}
+  {ModKey,		XK_Return,		spawn,		{.args = xtermcmd}	},
+  {ModKey,		XK_a,			spawn,		{.args = dmenucmd}	},
+  {ModKey|ShiftMask,	XK_e,			quit,		{0}			},
+  {ModKey,		XK_k,			move_focus,	{.val = -1}		},
+  {ModKey,		XK_j,			move_focus,	{.val = +1}		},
+  {ModKey,		XK_bracketright,	switch_layout,	{.val = +1}		},
+  {ModKey,		XK_bracketleft,		switch_layout,	{.val = -1}		},
 };
 
 #endif		/* !CONFIG_H_ */

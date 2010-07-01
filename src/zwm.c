@@ -25,7 +25,7 @@ static void	(*handlers[LASTEvent])(Wm *wm, XEvent *event) =
   [KeyPress] = key_press,
   [MapRequest] = map_request,
   [DestroyNotify] = destroy_notify,
-  /* [ConfigureNotify] = NULL */
+  [ConfigureNotify] = configure_notify
 };
 
 void		draw(Wm *wm)
@@ -34,8 +34,7 @@ void		draw(Wm *wm)
   Client	*client;
   Workspace	*cur = &wm->workspaces[wm->cwrksp];
 
-  wlog(RUN | WARN, "DRAW");
-  cur->layout->func(wm);
+  layouts[cur->layout].func(wm);
   list_foreach_as(cur->windows.head, tmp, (Client *), client)
     {
       if (client == cur->focus)
@@ -46,7 +45,7 @@ void		draw(Wm *wm)
 	  XRaiseWindow(wm->dpy,client->win);
 	}
       else
-	  XSetWindowBorder(wm->dpy, client->win, wm->colors.unfocus);
+	XSetWindowBorder(wm->dpy, client->win, wm->colors.unfocus);
     }
 }
 
@@ -64,20 +63,9 @@ void		key_press(Wm *wm, XEvent *event)
       keys[i].func(&keys[i].arg);
 }
 
-void		print_window(void *win)
-{
-  Client	*window = (Client *)win;
-
-  printf("Win = %d\n", (int)window->win);
-}
-
 void		map_request(Wm *wm, XEvent *event)
 {
-  Workspace	*cur = &wm->workspaces[wm->cwrksp];
-
-  wlog(RUN | WARN, "MAPREQUEST");
   add_window(wm, event->xmaprequest.window);
-  list_show(&cur->windows, print_window);
   XMapWindow(wm->dpy, event->xmaprequest.window);
   draw(wm);
 }
@@ -93,6 +81,12 @@ void		destroy_notify(Wm *wm, XEvent *event)
     }
 }
 
+void		configure_notify(Wm *wm, XEvent *event)
+{
+  (void)wm;
+  (void)event;
+}
+
 void		run_wm(Wm *wm)
 {
   XEvent	event;
@@ -100,7 +94,6 @@ void		run_wm(Wm *wm)
   while (wm->is_running && !XNextEvent(wm->dpy, &event))
     if (handlers[event.type])
       handlers[event.type](wm, &event);
-  XSync(wm->dpy, False);
 }
 
 void		grab_keys(Wm *wm)
@@ -113,7 +106,6 @@ void		grab_keys(Wm *wm)
       if ((code = XKeysymToKeycode(wm->dpy, keys[i].keysym)))
 	XGrabKey(wm->dpy, code, keys[i].mod, wm->root, True, GrabModeAsync, GrabModeAsync);
     }
-  XSync(wm->dpy, False);
 }
 
 void		finish_wm(Wm *wm)
@@ -146,11 +138,11 @@ void		init_wm(Wm *wm)
   wm->scr_height = DisplayHeight(wm->dpy, wm->screen);
   wm->colors.focus = get_color(conf.border_focus, wm);
   wm->colors.unfocus = get_color(conf.border_unfocus, wm);
+  wm->layouts_number = TABLELENGTH(layouts);
   grab_keys(wm);
   wa.event_mask = SubstructureNotifyMask|SubstructureRedirectMask;
   XChangeWindowAttributes(wm->dpy, wm->root, CWEventMask, &wa);
   XSelectInput(wm->dpy, wm->root, wa.event_mask);
-  XSync(wm->dpy, False);
 }
 
 int		main(void)

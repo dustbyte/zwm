@@ -23,8 +23,3 @@ void		spawn(const Arg *arg)
   else if (pid < 0)
     wlog(SYS | ERR, "fork failed, can't start %s", ((char **) arg->args)[0]);
 }
-
-void		quit(__attribute__((unused)) const Arg *arg)
-{
-  wm.is_running = false;
-}

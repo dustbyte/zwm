@@ -23,7 +23,7 @@ typedef struct		_Workspace
   Bool			stacked;
   Client		*focus;
   char			*repr;
-  struct _Layout	*layout;
+  unsigned int		layout;
 }			Workspace;
 
 typedef struct		_Conf
@@ -51,6 +51,7 @@ typedef struct		_Wm
   int			scr_width;
   int			scr_height;
   Bool			is_running;
+  unsigned int		layouts_number;
 }			Wm;
 
 typedef struct		_Layout
@@ -74,12 +75,19 @@ typedef struct		_Key
 }			Key;
 
 /*
+** General
+*/
+
+void		draw(Wm *wm);
+
+/*
 ** Handlers
 */
 
 void		key_press(Wm *wm, XEvent *event);
 void		map_request(Wm *wm, XEvent *event);
 void		destroy_notify(Wm *wm, XEvent *event);
+void		configure_notify(Wm *wm, XEvent *event);
 
 /*
 ** Windows
@@ -95,11 +103,14 @@ Client		*get_window(Wm *wm, Window window);
 
 void		spawn(const Arg *arg);
 void		quit(const Arg *arg);
+void		move_focus(const Arg *arg);
+void		switch_layout(const Arg *arg);
 
 /*
 ** Layouts
 */
 
 void		layout_tile(Wm *wm);
+void		layout_monocle(Wm *wm);
 
 #endif		/* !ZWM_H_ */
