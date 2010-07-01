@@ -24,6 +24,7 @@ void		zoom(__attribute__((unused))const Arg *arg)
 	{
 	  tmp = list_remove(clients, cur->focus->self.next);
 	  list_add_head(clients, tmp, tmp->data);
+	  cur->focus = clients->head->data;
 	}
     }
   draw(&wm);
