@@ -36,7 +36,7 @@ Conf		conf =
     "#838383"
   };
 
-const char *xtermcmd[] = {"xterm", NULL};
+const char *xtermcmd[] = {"urxvt", NULL};
 const char *dmenucmd[] = {"dmenu_run", NULL};
 
 const Key keys[] =

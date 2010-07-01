@@ -20,7 +20,8 @@ void		layout_tile(Wm *wm)
   cwrksp = &wm->workspaces[wm->cwrksp];
   num_master = cwrksp->windows.size <= cwrksp->master_size ?
     cwrksp->windows.size : cwrksp->windows.size - (cwrksp->windows.size - cwrksp->master_size);
-  if (num_master && num_master <= cwrksp->master_size)
+  wlog(RUN | INFO, "WIN NBR = %d || NUM MASTER = %d", cwrksp->windows.size, num_master);
+  if (num_master && cwrksp->windows.size <= cwrksp->master_size)
     {
       y = 0;
       win_height = wm->scr_height / num_master;
@@ -37,6 +38,7 @@ void		layout_tile(Wm *wm)
       y = 0;
       win_height = wm->scr_height / num_master;
       win_width = wm->scr_width * wm->conf->master_width;
+      wlog(RUN|INFO, "WIN WIDTH = %d", win_width);
       list_foreach_as(cwrksp->windows.head, tmp, (Client *), client)
 	{
 	  if (i <= num_master)

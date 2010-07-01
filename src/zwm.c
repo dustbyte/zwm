@@ -64,10 +64,20 @@ void		key_press(Wm *wm, XEvent *event)
       keys[i].func(&keys[i].arg);
 }
 
+void		print_window(void *win)
+{
+  Client	*window = (Client *)win;
+
+  printf("Win = %d\n", (int)window->win);
+}
+
 void		map_request(Wm *wm, XEvent *event)
 {
+  Workspace	*cur = &wm->workspaces[wm->cwrksp];
+
   wlog(RUN | WARN, "MAPREQUEST");
   add_window(wm, event->xmaprequest.window);
+  list_show(&cur->windows, print_window);
   XMapWindow(wm->dpy, event->xmaprequest.window);
   draw(wm);
 }
@@ -77,10 +87,10 @@ void		destroy_notify(Wm *wm, XEvent *event)
   Client	*win;
 
   if ((win = get_window(wm, event->xdestroywindow.window)) != NULL)
-    remove_window(wm, win);
-  else
-    wlog(RUN | WARN, "Destroy: Window does not exists");
-  draw(wm);
+    {
+      remove_window(wm, win);
+      draw(wm);
+    }
 }
 
 void		run_wm(Wm *wm)
@@ -90,6 +100,7 @@ void		run_wm(Wm *wm)
   while (wm->is_running && !XNextEvent(wm->dpy, &event))
     if (handlers[event.type])
       handlers[event.type](wm, &event);
+  XSync(wm->dpy, False);
 }
 
 void		grab_keys(Wm *wm)
@@ -102,6 +113,7 @@ void		grab_keys(Wm *wm)
       if ((code = XKeysymToKeycode(wm->dpy, keys[i].keysym)))
 	XGrabKey(wm->dpy, code, keys[i].mod, wm->root, True, GrabModeAsync, GrabModeAsync);
     }
+  XSync(wm->dpy, False);
 }
 
 void		finish_wm(Wm *wm)
@@ -117,6 +129,8 @@ void sigchld(__attribute__((unused))int unused) {
 
 void		init_wm(Wm *wm)
 {
+  XSetWindowAttributes wa;
+
   sigchld(0);
   wm->is_running = true;
   wm->cwrksp = 0;
@@ -133,8 +147,9 @@ void		init_wm(Wm *wm)
   wm->colors.focus = get_color(conf.border_focus, wm);
   wm->colors.unfocus = get_color(conf.border_unfocus, wm);
   grab_keys(wm);
-  /* XSelectInput(wm->dpy, wm->root, SubstructureNotifyMask); */
-  XSelectInput(wm->dpy, wm->root, SubstructureRedirectMask);
+  wa.event_mask = SubstructureNotifyMask|SubstructureRedirectMask;
+  XChangeWindowAttributes(wm->dpy, wm->root, CWEventMask, &wa);
+  XSelectInput(wm->dpy, wm->root, wa.event_mask);
   XSync(wm->dpy, False);
 }
 
