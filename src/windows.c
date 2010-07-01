@@ -21,16 +21,19 @@ void		add_window(Wm *wm, Window window)
 
 void		remove_window(Wm *wm, Client *win)
 {
-  if (win == wm->workspaces[wm->cwrksp].focus)
+  Workspace	*cur = &wm->workspaces[wm->cwrksp];
+  if (win == cur->focus)
     {
       if (win->self.next != NULL)
-	wm->workspaces[wm->cwrksp].focus = win->self.next->data;
+	cur->focus = win->self.next->data;
       else if (win->self.prev != NULL)
-	wm->workspaces[wm->cwrksp].focus = win->self.prev->data;
+	cur->focus = win->self.prev->data;
       else
-	wm->workspaces[wm->cwrksp].focus = NULL;
+	cur->focus = NULL;
     }
-  list_delete(&wm->workspaces[wm->cwrksp].windows, &win->self, list_free_dfl);
+  list_delete(&cur->windows, &win->self, list_free_dfl);
+  if (cur->windows.size == 0)
+    cur->focus = NULL;
 }
 
 Client		*get_window(Wm *wm, Window window)

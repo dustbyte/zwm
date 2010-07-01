@@ -39,7 +39,8 @@ Conf		conf =
   };
 
 const char *xtermcmd[] = {"rxvt", NULL};
-const char *dmenucmd[] = {"dmenu_run", NULL};
+const char *dmenucmd[] =
+  {"dmenu_run", "-nb", "#252525", "-nf", "#e3e3e3", "-sb", "#1e5e8a"};
 
 const Key keys[] =
 {
@@ -55,6 +56,7 @@ const Key keys[] =
   {ModKey,		XK_h,		resize,		{.dval = -0.05}		},
   {ModKey,		XK_l,		resize,		{.dval = +0.05}		},
   {ModKey,		XK_space,	zoom,		{0}			},
+  {ModKey|ShiftMask,	XK_q,		kill_client,	{0}			},
 };
 
 #endif		/* !CONFIG_H_ */
