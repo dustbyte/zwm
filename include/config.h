@@ -20,7 +20,6 @@ Layout		layouts[] =
 
 Workspace	workspaces[] =
   {
-    SET_WORKSPACE("0"),
     SET_WORKSPACE("1"),
     SET_WORKSPACE("2"),
     SET_WORKSPACE("3"),
@@ -29,7 +28,8 @@ Workspace	workspaces[] =
     SET_WORKSPACE("6"),
     SET_WORKSPACE("7"),
     SET_WORKSPACE("8"),
-    SET_WORKSPACE("9")
+    SET_WORKSPACE("9"),
+    SET_WORKSPACE("0")
   };
 
 Conf		conf =
@@ -55,6 +55,16 @@ const Key keys[] =
   {ModKey,		XK_l,		resize,		{.dval = 0.05}		},
   {ModKey,		XK_space,	zoom,		{0}			},
   {ModKey|ShiftMask,	XK_q,		kill_client,	{0}			},
+  {ModKey,		XK_1,		change_desktop,	{.val = 0}		},
+  {ModKey,		XK_2,		change_desktop,	{.val = 1}		},
+  {ModKey,		XK_3,		change_desktop,	{.val = 2}		},
+  {ModKey,		XK_4,		change_desktop,	{.val = 3}		},
+  {ModKey,		XK_5,		change_desktop,	{.val = 4}		},
+  {ModKey,		XK_6,		change_desktop,	{.val = 5}		},
+  {ModKey,		XK_7,		change_desktop,	{.val = 6}		},
+  {ModKey,		XK_8,		change_desktop,	{.val = 7}		},
+  {ModKey,		XK_9,		change_desktop,	{.val = 8}		},
+  {ModKey,		XK_0,		change_desktop,	{.val = 9}		},
 };
 
 #endif		/* !CONFIG_H_ */

@@ -32,7 +32,8 @@ LDFLAGS		=	-L/usr/X11R6/lib -lX11 -L$(LIBDIR) -llog -llists			\
 SRCDIR		=	src
 HDRDIR		=	include
 
-SRCS		=	$(SRCDIR)/commands/kill_client.c	\
+SRCS		=	$(SRCDIR)/commands/change_desktop.c	\
+			$(SRCDIR)/commands/kill_client.c	\
 			$(SRCDIR)/commands/move_focus.c		\
 			$(SRCDIR)/commands/quit.c		\
 			$(SRCDIR)/commands/resize.c		\

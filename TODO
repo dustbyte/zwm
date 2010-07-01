@@ -1,6 +1,6 @@
 -float ?			[ ]
 -tiling horizontal		[ ]
 -move				[ ]
--multi-bureaux			[ ]
+-multi-bureaux			[X]
 -kill client			[X]
--master size			[ ]
+-master size			[X]

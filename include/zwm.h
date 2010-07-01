@@ -79,7 +79,8 @@ typedef struct		_Key
 */
 
 void		draw(Wm *wm);
-
+void		undraw(Wm *wm);
+void		redraw(Wm *wm);
 /*
 ** Handlers
 */
@@ -108,12 +109,12 @@ void		move_focus(const Arg *arg);
 void		switch_layout(const Arg *arg);
 void		zoom(const Arg *arg);
 void		kill_client(const Arg *arg);
+void		change_desktop(const Arg *arg);
 
 /*
 ** Layouts
 */
 
-void		draw(Wm *wm);
 void		layout_tile(Wm *wm);
 void		layout_monocle(Wm *wm);
 

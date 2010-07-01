@@ -49,6 +49,27 @@ void		draw(Wm *wm)
     }
 }
 
+void		undraw(Wm *wm)
+{
+  Workspace	*cur = &wm->workspaces[wm->cwrksp];
+  t_elem	*tmp;
+  Client	*client;
+
+  list_foreach_as(cur->windows.head, tmp, (Client *), client)
+    XUnmapWindow(wm->dpy, client->win);
+}
+
+void		redraw(Wm *wm)
+{
+  Workspace	*cur = &wm->workspaces[wm->cwrksp];
+  t_elem	*tmp;
+  Client	*client;
+
+  list_foreach_as(cur->windows.head, tmp, (Client *), client)
+    XMapWindow(wm->dpy, client->win);
+  draw(wm);
+}
+
 void		key_press(Wm *wm, XEvent *event)
 {
   unsigned	i;
