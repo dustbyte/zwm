@@ -48,7 +48,7 @@ void		list_insert(t_list *list,
 	{
 	  elem_push_back(list, self, tmp, data);
 	  return ;
-	}	
+	}
     }
   list_add_tail(list, self, data);
 }

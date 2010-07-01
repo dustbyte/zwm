@@ -41,15 +41,16 @@ const char *dmenucmd[] = {"dmenu_run", NULL};
 
 const Key keys[] =
 {
-  {ModKey,		XK_Return,		spawn,		{.args = xtermcmd}	},
-  {ModKey,		XK_a,			spawn,		{.args = dmenucmd}	},
-  {ModKey|ShiftMask,	XK_e,			quit,		{0}			},
-  {ModKey,		XK_k,			move_focus,	{.val = -1}		},
-  {ModKey,		XK_j,			move_focus,	{.val = +1}		},
-  {ModKey,		XK_bracketright,	switch_layout,	{.val = +1}		},
-  {ModKey,		XK_bracketleft,		switch_layout,	{.val = -1}		},
-  {ModKey,		XK_h,			resize,		{.dval = -0.05}		},
-  {ModKey,		XK_l,			resize,		{.dval = 0.05}		}
+  {ModKey,		XK_Return,	spawn,		{.args = xtermcmd}	},
+  {ModKey,		XK_a,		spawn,		{.args = dmenucmd}	},
+  {ModKey|ShiftMask,	XK_e,		quit,		{0}			},
+  {ModKey,		XK_k,		move_focus,	{.val = -1}		},
+  {ModKey,		XK_j,		move_focus,	{.val = +1}		},
+  {ModKey,		XK_Right,	switch_layout,	{.val = +1}		},
+  {ModKey,		XK_Left,	switch_layout,	{.val = -1}		},
+  {ModKey,		XK_h,		resize,		{.dval = -0.05}		},
+  {ModKey,		XK_l,		resize,		{.dval = 0.05}		},
+  {ModKey,		XK_space,	zoom,		{0}			},
 };
 
 #endif		/* !CONFIG_H_ */
