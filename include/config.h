@@ -10,6 +10,7 @@ Layout		layouts[] =
   {
     {"[]=",	layout_tile	},
     {"[O]",	layout_monocle	},
+    {"TT",	layout_htile	},
     /* {"[]~",	NULL		} */
   };
 

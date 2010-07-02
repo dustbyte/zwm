@@ -111,6 +111,7 @@ void		change_desktop(const Arg *arg);
 */
 
 void		layout_tile(Wm *wm);
+void		layout_htile(Wm *wm);
 void		layout_monocle(Wm *wm);
 
 #endif		/* !ZWM_H_ */
