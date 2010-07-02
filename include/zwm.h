@@ -26,12 +26,6 @@ typedef struct		_Workspace
   unsigned int		layout;
 }			Workspace;
 
-typedef struct		_Conf
-{
-  char			*border_focus;
-  char			*border_unfocus;
-}			Conf;
-
 typedef struct		_Colors
 {
   unsigned int		focus;
@@ -42,7 +36,6 @@ typedef struct		_Wm
 {
   unsigned int		cwrksp;
   Workspace		*workspaces;
-  Conf			*conf;
   Colors		colors;
   Display		*dpy;
   int			screen;
@@ -51,6 +44,7 @@ typedef struct		_Wm
   int			scr_height;
   Bool			is_running;
   unsigned int		layouts_number;
+  unsigned int		bar_height;
 }			Wm;
 
 typedef struct		_Layout

@@ -149,17 +149,17 @@ void		init_wm(Wm *wm)
   wm->is_running = true;
   wm->cwrksp = 0;
   wm->workspaces = workspaces;
-  wm->conf = &conf;
   if ((wm->dpy = XOpenDisplay(NULL)) == NULL)
     wlog(XLIB | ERR, "Cannot open display");
   else
     wlog(XLIB | INFO, "Display Opened");
   wm->screen = DefaultScreen(wm->dpy);
   wm->root = RootWindow(wm->dpy, wm->screen);
+  wm->bar_height = BAR_HEIGHT;
   wm->scr_width = DisplayWidth(wm->dpy, wm->screen);
-  wm->scr_height = DisplayHeight(wm->dpy, wm->screen);
-  wm->colors.focus = get_color(conf.border_focus, wm);
-  wm->colors.unfocus = get_color(conf.border_unfocus, wm);
+  wm->scr_height = DisplayHeight(wm->dpy, wm->screen) - wm->bar_height;
+  wm->colors.focus = get_color(FOCUS_COLOR, wm);
+  wm->colors.unfocus = get_color(UNFOCUS_COLOR, wm);
   wm->layouts_number = TABLELENGTH(layouts);
   grab_keys(wm);
   wa.event_mask = SubstructureNotifyMask|SubstructureRedirectMask;

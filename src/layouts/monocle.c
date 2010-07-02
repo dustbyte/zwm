@@ -11,7 +11,7 @@ void		layout_monocle(Wm *wm)
 
   if (cur->focus != NULL)
     {
-      XMoveResizeWindow(wm->dpy, cur->focus->win, 0, 0,
+      XMoveResizeWindow(wm->dpy, cur->focus->win, 0, wm->bar_height,
 			wm->scr_width - 2, wm->scr_height - 2);
     }
 }

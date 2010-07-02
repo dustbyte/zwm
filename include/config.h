@@ -15,6 +15,9 @@ Layout		layouts[] =
 
 #define	MASTER_WIDTH	0.7
 #define	MASTER_SIZE	1
+#define	FOCUS_COLOR	"#990000"
+#define	UNFOCUS_COLOR	"#838383"
+#define BAR_HEIGHT	0
 
 #define	SET_WORKSPACE(X) {{0, NULL, NULL}, MASTER_SIZE, MASTER_WIDTH, NULL, (X), 0}
 
@@ -30,12 +33,6 @@ Workspace	workspaces[] =
     SET_WORKSPACE("8"),
     SET_WORKSPACE("9"),
     SET_WORKSPACE("0")
-  };
-
-Conf		conf =
-  {
-    "#990000",
-    "#838383"
   };
 
 const char *xtermcmd[] = {"rxvt", NULL};
