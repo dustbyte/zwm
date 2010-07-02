@@ -11,7 +11,6 @@ void		zoom(__attribute__((unused))const Arg *arg)
 {
   Workspace	*cur = &wm.workspaces[wm.cwrksp];
   t_list	*clients = &cur->windows;
-  t_elem	*tmp;
 
   if (clients->size > 1)
     {
@@ -21,11 +20,7 @@ void		zoom(__attribute__((unused))const Arg *arg)
 	  list_add_head(clients, &cur->focus->self, cur->focus->self.data);
 	}
       else
-	{
-	  tmp = list_remove(clients, cur->focus->self.next);
-	  list_add_head(clients, tmp, tmp->data);
-	  cur->focus = clients->head->data;
-	}
+	list_swap_next(clients, clients->head);
     }
   draw(&wm);
 }
