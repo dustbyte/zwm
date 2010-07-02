@@ -17,7 +17,7 @@ Layout		layouts[] =
 #define	MASTER_SIZE	1
 #define	FOCUS_COLOR	"#990000"
 #define	UNFOCUS_COLOR	"#838383"
-#define BAR_HEIGHT	0
+#define BAR_HEIGHT	20
 
 #define	SET_WORKSPACE(X) {{0, NULL, NULL}, MASTER_SIZE, MASTER_WIDTH, NULL, (X), 0}
 
