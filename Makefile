@@ -34,15 +34,16 @@ HDRDIR		=	include
 
 SRCS		=	$(SRCDIR)/commands/change_desktop.c	\
 			$(SRCDIR)/commands/kill_client.c	\
+			$(SRCDIR)/commands/master_size.c	\
 			$(SRCDIR)/commands/move_focus.c		\
+			$(SRCDIR)/commands/move_window.c	\
 			$(SRCDIR)/commands/quit.c		\
 			$(SRCDIR)/commands/resize.c		\
 			$(SRCDIR)/commands/spawn.c		\
 			$(SRCDIR)/commands/switch_layout.c	\
 			$(SRCDIR)/commands/zoom.c		\
-			$(SRCDIR)/commands/master_size.c	\
-			$(SRCDIR)/layouts/monocle.c		\
 			$(SRCDIR)/layouts/htile.c		\
+			$(SRCDIR)/layouts/monocle.c		\
 			$(SRCDIR)/layouts/tile.c		\
 			$(SRCDIR)/tools.c			\
 			$(SRCDIR)/windows.c			\

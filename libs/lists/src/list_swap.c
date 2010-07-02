@@ -2,12 +2,25 @@
 
 #include "lists.h"
 
+static void	swap2(t_list *list)
+{
+  t_elem	*tmp;
+
+  tmp = list->head;
+  list->head = list->tail;
+  list->tail = tmp;
+  list->head->prev = NULL;
+  list->head->next = list->tail;
+  list->tail->next = NULL;
+  list->tail->prev = list->head;
+}
+
 void		list_swap_next(t_list *list, t_elem *elem)
 {
   t_elem	*next;
   t_elem	*tmp;
 
-  if (list->size > 1)
+  if (list->size > 2)
     {
       if (elem != list->tail)
 	{
@@ -37,8 +50,9 @@ void		list_swap_next(t_list *list, t_elem *elem)
 	elem->next->prev = elem;
       if (next->prev != NULL)
 	next->prev->next = next;
-
     }
+  else if (list->size == 2)
+    swap2(list);
 }
 
 void		list_swap_prev(t_list *list, t_elem *elem)
@@ -46,7 +60,7 @@ void		list_swap_prev(t_list *list, t_elem *elem)
   t_elem	*prev;
   t_elem	*tmp;
 
-  if (list->size > 1)
+  if (list->size > 2)
     {
       if (elem != list->head)
 	{
@@ -77,4 +91,6 @@ void		list_swap_prev(t_list *list, t_elem *elem)
       if (prev->next != NULL)
 	prev->next->prev = prev;
     }
+  else if (list->size == 2)
+    swap2(list);
 }

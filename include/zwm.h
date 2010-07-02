@@ -105,6 +105,7 @@ void		zoom(const Arg *arg);
 void		master_size(const Arg *arg);
 void		kill_client(const Arg *arg);
 void		change_desktop(const Arg *arg);
+void		move_window(const Arg *arg);
 
 /*
 ** Layouts
