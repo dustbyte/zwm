@@ -78,8 +78,8 @@ t_elem		*list_get_elem(t_list *list, size_t iter);
 ** list_swap.c
 */
 
-int		elem_swap_next(t_elem *elem);
-int		elem_swap_prev(t_elem *elem);
+void		list_swap_next(t_list *list, t_elem *elem);
+void		list_swap_prev(t_list *list, t_elem *elem);
 
 /*
 ** lists.c
