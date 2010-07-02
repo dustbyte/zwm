@@ -98,6 +98,7 @@ void		destroy_notify(Wm *wm, XEvent *event)
   if ((win = get_window(wm, event->xdestroywindow.window)) != NULL)
     {
       remove_window(wm, win);
+      XSync(wm->dpy, False);
       draw(wm);
     }
 }

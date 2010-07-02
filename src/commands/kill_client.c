@@ -21,6 +21,7 @@ void		kill_client(__attribute__((unused))const Arg *arg)
 	cur->focus = clients->head->data;
       XKillClient(wm.dpy, focus->win);
       remove_window(&wm, focus);
+      XSync(wm.dpy, False);
       draw(&wm);
     }
 }
