@@ -132,8 +132,20 @@ void		grab_keys(Wm *wm)
     }
 }
 
+void		free_client(void *elem)
+{
+  Client	*client = (Client *)elem;
+
+  XKillClient(wm.dpy, client->win);
+  free(client);
+}
+
 void		finish_wm(Wm *wm)
 {
+  size_t	i;
+
+  for (i = 0; i < TABLELENGTH(workspaces); i++)
+    list_empty(&wm->workspaces[i].windows, free_client);
   XCloseDisplay(wm->dpy);
 }
 

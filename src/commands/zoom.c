@@ -22,7 +22,7 @@ void		zoom(__attribute__((unused))const Arg *arg)
       else
 	{
 	  list_swap_next(clients, clients->head);
-	  cur->focus = clients->head;
+	  cur->focus = clients->head->data;
 	}
     }
   draw(&wm);
