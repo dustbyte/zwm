@@ -26,7 +26,8 @@ static void	(*handlers[LASTEvent])(Wm *wm, XEvent *event) =
   [KeyPress] = key_press,
   [MapRequest] = map_request,
   [DestroyNotify] = destroy_notify,
-  [ConfigureNotify] = configure_notify
+  [ConfigureNotify] = configure_notify,
+  [EnterNotify] = enter_notify
 };
 
 void		draw(Wm *wm)
@@ -83,6 +84,26 @@ void		key_press(Wm *wm, XEvent *event)
   for (i = 0; i < TABLELENGTH(keys); ++i)
     if (keys[i].keysym == keysym && keys[i].mod == keyevent.state)
       keys[i].func(&keys[i].arg);
+}
+
+void		enter_notify(Wm *wm, XEvent *event)
+{
+  t_elem	*tmp;
+  Client	*client;
+  Workspace	*cur = &wm->workspaces[wm->cwrksp];
+  XCrossingEvent	enter_event;
+
+  enter_event = event->xcrossing;
+  printf("EntrerNotify -> %d\n", enter_event.window);
+  list_foreach_as(cur->windows.head, tmp, (Client *), client)
+    {
+      if (client->win == enter_event.window)
+	{
+	  cur->focus = client;
+	  break;
+	}
+    }
+  draw(wm);
 }
 
 void		map_request(Wm *wm, XEvent *event)
@@ -181,7 +202,7 @@ void		init_wm(Wm *wm)
   bzero(wm->zmenu.buf, 4096);
   wm->zmenu.exec_list = NULL;
   grab_keys(wm);
-  wa.event_mask = SubstructureNotifyMask|SubstructureRedirectMask;
+  wa.event_mask = SubstructureNotifyMask|SubstructureRedirectMask|EnterWindowMask;
   XChangeWindowAttributes(wm->dpy, wm->root, CWEventMask, &wa);
   XSelectInput(wm->dpy, wm->root, wa.event_mask);
 }
