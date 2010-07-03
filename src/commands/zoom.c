@@ -20,7 +20,10 @@ void		zoom(__attribute__((unused))const Arg *arg)
 	  list_add_head(clients, &cur->focus->self, cur->focus->self.data);
 	}
       else
-	list_swap_next(clients, clients->head);
+	{
+	  list_swap_next(clients, clients->head);
+	  cur->focus = clients->head;
+	}
     }
   draw(&wm);
 }
