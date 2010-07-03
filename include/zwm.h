@@ -32,6 +32,18 @@ typedef struct		_Colors
   unsigned int		unfocus;
 }			Colors;
 
+typedef struct		_Zmenu
+{
+  enum {
+    ZMENU_NORMAL = 0,
+    ZMENU_CALL,
+    ZMENU_RUN
+  }			status;
+  char			buf[4096];
+  char			**exec_list;
+  /* Ajouter conf */
+}			Zmenu;
+
 typedef struct		_Wm
 {
   unsigned int		cwrksp;
@@ -46,6 +58,7 @@ typedef struct		_Wm
   unsigned int		layouts_number;
   unsigned int		bar_height;
   struct _Layout	*layouts;
+  struct _Zmenu		zmenu;
 }			Wm;
 
 typedef struct		_Layout

@@ -4,6 +4,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <strings.h>
 
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
@@ -176,6 +177,9 @@ void		init_wm(Wm *wm)
   wm->colors.unfocus = get_color(UNFOCUS_COLOR, wm);
   wm->layouts_number = TABLELENGTH(layouts);
   wm->layouts = layouts;
+  wm->zmenu.status = ZMENU_NORMAL;
+  bzero(wm->zmenu.buf, 4096);
+  wm->zmenu.exec_list = NULL;
   grab_keys(wm);
   wa.event_mask = SubstructureNotifyMask|SubstructureRedirectMask;
   XChangeWindowAttributes(wm->dpy, wm->root, CWEventMask, &wa);
