@@ -114,8 +114,10 @@ void		run_wm(Wm *wm)
   XEvent	event;
 
   while (wm->is_running && !XNextEvent(wm->dpy, &event))
-    if (handlers[event.type])
-      handlers[event.type](wm, &event);
+    {
+      if (handlers[event.type])
+	handlers[event.type](wm, &event);
+    }
 }
 
 void		grab_keys(Wm *wm)
@@ -161,6 +163,7 @@ void		init_wm(Wm *wm)
   wm->colors.focus = get_color(FOCUS_COLOR, wm);
   wm->colors.unfocus = get_color(UNFOCUS_COLOR, wm);
   wm->layouts_number = TABLELENGTH(layouts);
+  wm->layouts = layouts;
   grab_keys(wm);
   wa.event_mask = SubstructureNotifyMask|SubstructureRedirectMask;
   XChangeWindowAttributes(wm->dpy, wm->root, CWEventMask, &wa);

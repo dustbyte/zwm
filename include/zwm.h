@@ -45,6 +45,7 @@ typedef struct		_Wm
   Bool			is_running;
   unsigned int		layouts_number;
   unsigned int		bar_height;
+  struct _Layout	*layouts;
 }			Wm;
 
 typedef struct		_Layout
@@ -114,5 +115,6 @@ void		move_window(const Arg *arg);
 void		layout_tile(Wm *wm);
 void		layout_htile(Wm *wm);
 void		layout_monocle(Wm *wm);
+void		layout_mirror(Wm *wm);
 
 #endif		/* !ZWM_H_ */

@@ -11,7 +11,7 @@ Layout		layouts[] =
     {"[]=",	layout_tile	},
     {"[O]",	layout_monocle	},
     {"TT",	layout_htile	},
-    /* {"[]~",	NULL		} */
+    {"=[]=",	layout_mirror	},
   };
 
 #define	MASTER_WIDTH	0.7
@@ -33,7 +33,7 @@ Workspace	workspaces[] =
     SET_WORKSPACE("7"),
     SET_WORKSPACE("8"),
     SET_WORKSPACE("9"),
-    SET_WORKSPACE("0")
+    SET_WORKSPACE("0"),
   };
 
 const char *xtermcmd[] = {"rxvt", NULL};

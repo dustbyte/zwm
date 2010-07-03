@@ -11,7 +11,6 @@ void		change_desktop(const Arg *arg)
 {
   unsigned int	desk = arg->val;
 
-  wlog(RUN | INFO, "Current workspace = %d || wanted workspace = %d", wm.cwrksp, desk);
   undraw(&wm);
   wm.cwrksp = desk;
   redraw(&wm);
