@@ -26,8 +26,9 @@ static void	(*handlers[LASTEvent])(Wm *wm, XEvent *event) =
   [KeyPress] = key_press,
   [MapRequest] = map_request,
   [DestroyNotify] = destroy_notify,
-  [ConfigureNotify] = configure_notify,
   [EnterNotify] = enter_notify
+  [ConfigureRequest] = configure_request,
+  [ConfigureNotify] = configure_notify
 };
 
 void		draw(Wm *wm)
@@ -125,8 +126,53 @@ void		destroy_notify(Wm *wm, XEvent *event)
     }
 }
 
+void		configure(Wm *wm, Client *c)
+{
+  XConfigureEvent ce;
+  XWindowAttributes attr;
+
+  if (!XGetWindowAttributes(wm->dpy, c->win, &attr))
+    {
+      ce.type = ConfigureNotify;
+      ce.display = wm->dpy;
+      ce.event = c->win;
+      ce.window = c->win;
+      ce.x = attr.x;
+      ce.y = attr.y;
+      ce.width = attr.width;
+      ce.height = attr.height;
+      ce.border_width = attr.border_width;
+      ce.above = None;
+      ce.override_redirect = False;
+      XSendEvent(wm->dpy, c->win, False, StructureNotifyMask, (XEvent *)&ce);
+    }
+}
+
+void		configure_request(Wm *wm, XEvent *event)
+{
+  Client	*c;
+  XConfigureRequestEvent *ev = &event->xconfigurerequest;
+  XWindowChanges wc;
+
+  if (!(c = get_window(wm, ev->window)))
+    {
+      wc.x = ev->x;
+      wc.y = ev->y;
+      wc.width = ev->width;
+      wc.height = ev->height;
+      wc.border_width = ev->border_width;
+      wc.sibling = ev->above;
+      wc.stack_mode = ev->detail;
+      XConfigureWindow(wm->dpy, ev->window, ev->value_mask, &wc);
+    }
+  else
+    configure(wm, c);
+  XSync(wm->dpy, False);
+}
+
 void		configure_notify(Wm *wm, XEvent *event)
 {
+  wlog(RUN | INFO, "Configure Notify");
   (void)wm;
   (void)event;
 }

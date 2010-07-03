@@ -97,6 +97,7 @@ void		key_press(Wm *wm, XEvent *event);
 void		map_request(Wm *wm, XEvent *event);
 void		enter_notify(Wm *wm, XEvent *event);
 void		destroy_notify(Wm *wm, XEvent *event);
+void		configure_request(Wm *wm, XEvent *event);
 void		configure_notify(Wm *wm, XEvent *event);
 /*
 ** Windows
