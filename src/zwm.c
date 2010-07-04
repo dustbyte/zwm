@@ -174,24 +174,9 @@ void		key_press(Wm *wm, XEvent *event)
 void		map_request(Wm *wm, XEvent *event)
 {
   XMapRequestEvent *ev = &event->xmaprequest;
-  XWindowAttributes attr;
-  Client	*client = NULL;
-  unsigned int	save_workspace = wm->cwrksp;
 
-  wm->cwrksp = check_rules(wm, ev->window);
-  if (!XGetWindowAttributes(wm->dpy, ev->window, &attr))
-    {
-      wlog(SYS | WARN, "Can't get window's attributes");
-      return ;
-    }
-  if (attr.override_redirect)
+  if (!add_client(wm, ev->window))
     return ;
-  if (get_window(wm, ev->window))
-    return ;
-  client = add_window(wm, ev->window);
-  set_win_attributes(client, attr.x, attr.y, attr.width,
-		     attr.height, attr.border_width);
-  wm->cwrksp = save_workspace;
   XSelectInput(wm->dpy, event->xmaprequest.window, EnterWindowMask);
   XSync(wm->dpy, false);
   draw(wm);
@@ -220,6 +205,29 @@ void		unmap_notitfy(Wm *wm, XEvent *event)
 /*
 ** Tool functions
 */
+
+Bool		add_client(Wm *wm, Window win)
+{
+  XWindowAttributes attr;
+  Client	*client = NULL;
+  unsigned int	save_workspace = wm->cwrksp;
+
+  wm->cwrksp = check_rules(wm, win);
+  if (!XGetWindowAttributes(wm->dpy, win, &attr))
+    {
+      wlog(SYS | WARN, "Can't get window's attributes");
+      return (false);
+    }
+  if (attr.override_redirect)
+    return (false);
+  if (get_window(wm, win))
+    return (false);
+  client = add_window(wm, win);
+  set_win_attributes(client, attr.x, attr.y, attr.width,
+		     attr.height, attr.border_width);
+  wm->cwrksp = save_workspace;
+  return (true);
+}
 
 void		configure(Wm *wm, Client *c)
 {
@@ -261,6 +269,39 @@ void		run_wm(Wm *wm)
       zmenu(wm);
       if (handlers[event.type])
 	handlers[event.type](wm, &event);
+    }
+}
+
+/* Thanks to DWM */
+void		scan_windows(Wm *wm)
+{
+  unsigned int	i, num;
+  Window	d1, d2, *wins = NULL;
+  XWindowAttributes wa;
+
+  if (XQueryTree(wm->dpy, wm->root, &d1, &d2, &wins, &num))
+    {
+      for (i = 0; i < num; i++)
+	{
+	  if(!XGetWindowAttributes(wm->dpy, wins[i], &wa)
+	     || wa.override_redirect || XGetTransientForHint(wm->dpy, wins[i], &d1))
+	    continue;
+	  if (wa.map_state == IsViewable)
+	    add_client(wm, wins[i]);
+	}
+      for (i = 0; i < num; i++)
+	{
+	  if (!XGetWindowAttributes(wm->dpy, wins[i], &wa))
+	    continue;
+	  if (XGetTransientForHint(wm->dpy, wins[i], &d1)
+	     && (wa.map_state == IsViewable))
+	    add_client(wm, wins[i]);
+	}
+      if (wins)
+	{
+	  XFree(wins);
+	  draw(wm);
+	}
     }
 }
 
@@ -330,6 +371,7 @@ void		init_wm(Wm *wm)
   wa.event_mask = SubstructureNotifyMask|SubstructureRedirectMask;
   XChangeWindowAttributes(wm->dpy, wm->root, CWEventMask, &wa);
   XSelectInput(wm->dpy, wm->root, wa.event_mask);
+  scan_windows(wm);
 }
 
 void		sigchld(__attribute__((unused))int unused)

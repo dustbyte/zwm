@@ -34,14 +34,12 @@ void		move_to_workspace(const Arg *arg)
   if (focus && new != cur)
     {
       elem = list_remove(&cur->windows, &focus->self);
-
       if (cur->windows.size > 0)
 	cur->focus = (Client *)cur->windows.head->data;
       else
 	cur->focus = NULL;
       unmap_window(&wm, focus);
       list_add_head(&new->windows, elem, elem->data);
-
       new->focus = focus;
       draw(&wm);
     }

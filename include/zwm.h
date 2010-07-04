@@ -104,10 +104,12 @@ typedef struct		_Key
 ** General
 */
 
+Bool		add_client(Wm *wm, Window win);
 void		configure(Wm *wm, Client *c);
 void		draw(Wm *wm);
 void		undraw(Wm *wm);
 void		redraw(Wm *wm);
+void		scan_windows(Wm *wm);
 void		sigchld(int unused);
 void		update_wm_hints(Wm *wm, Client *client);
 
