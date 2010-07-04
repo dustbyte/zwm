@@ -14,7 +14,7 @@ Layout		layouts[] =
     {"=[]=",	layout_mirror	},
   };
 
-#define	FOCUS_FOLLOWS_MOUSE	true
+#define	FOCUS_FOLLOWS_MOUSE	false
 #define	MASTER_WIDTH		0.7
 #define	MASTER_SIZE		1
 #define	FOCUS_COLOR		"#990000"
