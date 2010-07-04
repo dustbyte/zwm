@@ -70,22 +70,27 @@ void		move_resize_window(Wm *wm, Client *client,
 				   unsigned int x, unsigned int y,
 				   unsigned int width, unsigned int height)
 {
-  if (!client->mapped)
-    map_window(wm, client);
+  map_window(wm, client);
   set_win_attributes(client, x, y, width, height, client->border_width);
   base_move_resize_window(wm, client);
 }
 
 void		map_window(Wm *wm, Client *client)
 {
-  XMapWindow(wm->dpy, client->win);
-  client->mapped = true;
+  if (!client->mapped)
+    {
+      XMapWindow(wm->dpy, client->win);
+      client->mapped = true;
+    }
 }
 
 void		unmap_window(Wm *wm, Client *client)
 {
-  XUnmapWindow(wm->dpy, client->win);
-  client->mapped = false;
+  if (client->mapped)
+    {
+      XUnmapWindow(wm->dpy, client->win);
+      client->mapped = false;
+    }
 }
 
 void		base_move_resize_window(Wm *wm, Client *client)
