@@ -23,19 +23,19 @@ void		layout_mirror(Wm *wm)
 
   if (clients->size == 1)
     {
-      XMoveResizeWindow(wm->dpy, ((Client *)clients->head->data)->win,
-			0, wm->bar_height,
-			wm->scr_width - 2, wm->scr_height - 2);
+      move_resize_window(wm, clients->head->data,
+			 0, wm->bar_height,
+			 wm->scr_width - 2, wm->scr_height - 2);
     }
   else if (clients->size == 2)
     {
       win_width = wm->scr_width * cur->master_width;
-      XMoveResizeWindow(wm->dpy, ((Client *)clients->head->data)->win,
-			0, wm->bar_height,
-			win_width - 2, wm->scr_height - 2);
-      XMoveResizeWindow(wm->dpy, ((Client *)clients->tail->data)->win,
-			win_width, wm->bar_height,
-			wm->scr_width - win_width - 2, wm->scr_height - 2);
+      move_resize_window(wm, clients->head->data,
+			 0, wm->bar_height,
+			 win_width - 2, wm->scr_height - 2);
+      move_resize_window(wm, clients->tail->data,
+			 win_width, wm->bar_height,
+			 wm->scr_width - win_width - 2, wm->scr_height - 2);
     }
   else if (clients->size >= 3)
     {
@@ -51,28 +51,28 @@ void		layout_mirror(Wm *wm)
 	{
 	  if (tmp == clients->head)
 	    {
-	      XMoveResizeWindow(wm->dpy, client->win,
-				win_width, wm->bar_height,
-				win_width_master - 2,
-				wm->scr_height - 2);
+	      move_resize_window(wm, client,
+				 win_width, wm->bar_height,
+				 win_width_master - 2,
+				 wm->scr_height - 2);
 	    }
 	  else
 	    {
 	      if (left)
 		{
-		  XMoveResizeWindow(wm->dpy, client->win,
-				    0, yleft,
-				    win_width - 2,
-				    left_height - 2);
+		  move_resize_window(wm, client,
+				     0, yleft,
+				     win_width - 2,
+				     left_height - 2);
 		  yleft += left_height;
 		}
 	      else
 	      	{
-	      	  XMoveResizeWindow(wm->dpy, client->win,
-	      			    win_width + wm->scr_width - (2 * win_width),
-				    yright,
-	      			    win_width - 2,
-	      			    right_height - 2);
+	      	  move_resize_window(wm, client,
+				     win_width + wm->scr_width - (2 * win_width),
+				     yright,
+				     win_width - 2,
+				     right_height - 2);
 	      	  yright += right_height;
 	      	}
 	      left = !left;
