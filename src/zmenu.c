@@ -11,6 +11,13 @@
 
 extern		char **environ;
 
+typedef struct Item Item;
+struct Item {
+  char *text;
+  Item *next;
+  Item *left, *right;
+};
+
 char		*get_path(void)
 {
   char		**cur;
@@ -84,6 +91,62 @@ void		zmenu_create_list(Wm *wm)
     }
 }
 
+int		grabkeyboard(Wm *wm)
+{
+  unsigned	int len;
+
+  for (len = 1000; len; len--)
+    {
+      if (XGrabKeyboard(wm->zmenu.dpy,
+		       wm->zmenu.parent,
+		       True,
+		       GrabModeAsync,
+		       GrabModeAsync,
+		       CurrentTime) == GrabSuccess)
+	break;
+      usleep(1000);
+    }
+  printf("lol\n");
+  return len > 0;
+}
+
+void		readstdin(void)
+{
+  char		*p;
+  char		text[4096];
+  char		buf[sizeof text];
+  char		*maxname = NULL;
+  unsigned int	len = 0;
+  unsigned int	max = 0;
+  Item		*allitems = NULL;
+  Item		*i;
+  Item		*new;
+
+  i = NULL;
+  while (fgets(buf, sizeof buf, stdin))
+    {
+      len = strlen(buf);
+      if (buf[len-1] == '\n')
+	buf[--len] = '\0';
+      if (!(p = strdup(buf)))
+	wlog(SYS | ERR, "strdup");
+      if (max < len || !maxname)
+	{
+	  maxname = p;
+	  max = len;
+	}
+      if (!(new = (Item *)malloc(sizeof(Item))))
+	wlog(SYS | ERR, "malloc");
+      new->next = new->left = new->right = NULL;
+      new->text = p;
+      if (!i)
+	allitems = new;
+      else
+	i->next = new;
+      i = new;
+    }
+}
+
 void		init_call_zmenu(Wm *wm)
 {
   t_elem	*e;
@@ -91,6 +154,12 @@ void		init_call_zmenu(Wm *wm)
   bzero(wm->zmenu.buf, 4096);
   zmenu_create_list(wm);
   wm->zmenu.status = ZMENU_RUN;
+  if(!(wm->zmenu.dpy = XOpenDisplay(NULL)))
+    wlog(SYS | ERR, "XOpenDisplay");
+  wm->zmenu.screen = DefaultScreen(wm->zmenu.dpy);
+  wm->zmenu.parent = RootWindow(wm->zmenu.dpy, wm->zmenu.screen);
+  readstdin();
+  grabkeyboard(wm);
 }
 
 int		zmenu(Wm *wm)

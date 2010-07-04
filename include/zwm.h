@@ -46,6 +46,10 @@ typedef struct		_Zmenu
   }			status;
   char			buf[4096];
   t_list		exec_list;
+  Display		*dpy;
+  int			screen;
+  Window		parent;
+  Window		win;
   /* Ajouter conf */
 }			Zmenu;
 
