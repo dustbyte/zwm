@@ -47,9 +47,13 @@ Application	rules[] =
     {"Gvim",		1}
   };
 
+/*
+** Must be NULL-terminated
+*/
+
 const char *xtermcmd[] = {"xterm", NULL};
 const char *dmenucmd[] =
-  {"dmenu_run", "-nb", "#252525", "-nf", "#e3e3e3", "-sb", "#1e5e8a"};
+  {"dmenu_run", "-nb", "#252525", "-nf", "#e3e3e3", "-sb", "#1e5e8a", NULL};
 
 #define	WORKSPACE_KEY(KEY, WRKSP)					\
   {ModKey,		(KEY),		change_workspace,	{.val = WRKSP}	}, \
