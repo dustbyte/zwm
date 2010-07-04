@@ -49,8 +49,6 @@ void		draw(Wm *wm)
   layouts[cur->layout].func(wm);
   list_foreach_as(cur->windows.head, tmp, (Client *), client)
     {
-      if (!client->mapped)
-	map_window(wm, client);
       if (client == cur->focus)
 	{
 	  border_width_window(wm, client, 1);
