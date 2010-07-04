@@ -1,0 +1,112 @@
+.TH ZWM 1
+.SH NAME
+zwm \- z window manager
+.SH SYNOPSIS
+.B zwm
+.SH DESCRIPTION
+zwm is a tiling window manager for the X window system based on dwm, the
+dynamic window manager. It manages windows following a layout system,
+who permits to extend the base code quickly and easily. zwm provides
+numerous layouts in its default version.
+
+The main layout is the tiling layout. It manages windows into two
+distinct parts: the master area and the stacking area.
+
+The master area is the working area and needs to large and clear
+enought. The stacking area is a stack of unused windows whom don't need
+to have a great visibility. Nevertheless, a new feature of zwm is the
+ability to increase the number of windows into the master area,
+permitting a quick access very demanded applications.
+
+Unlike dwm, zwm provide a pretty large number of tiling layouts, all
+based on the master/stack couple, except the monocle.
+The monocle is a fullscreen layout in which only the focused window is
+visible, and you get the previous/next window as a caroussel.
+
+zwm is higly configurable and, in a certain way, extensible. The
+configuration requires a low-level experience in the C language to edit
+its C header file.
+This approach permits a very high security in the runtime (no dialog to
+the outside) and an good performance (no need to parse a plain text file
+or embbed a scripting language engine).
+
+.SH USAGE
+To avoid conflicts with numerous of programs, the default modifier in
+zwm is not the ALT (Mod1Mask) modifier but the Super (Mod4Mask / Windows
+key) modifier.
+
+.SS Keyboard Commands
+.TP
+.B Mod-Enter
+Start xterm(1)
+.TP
+.B Mod-a
+Start dmenu(1)
+.TP
+.B Mod-Shift-e
+Quit zwm
+.TP
+.B Mod-j
+Switch focus to the next window in the workspace
+.TP
+.B Mod-k
+Switch focus to the previous window in the workspace
+.TP
+.B Mod-Shift-j
+Decrease master size (ie: number of windows into the master area)
+.TP
+.B Mod-Shift-k
+Increase master size
+.TP
+.B Mod-Right
+Switch to next layout
+.TP
+.B Mod-Left
+Switch to previous layout
+.TP
+.B Mod-h
+Increase master width
+.TP
+.B Mod-l
+Decrease master width
+.TP
+.B Mod-space
+Switch focused window with the master window.
+In case of the focused is the master window, switch with the window right after the master
+.TP
+.B Mod-Shift-q
+Kill the focused window
+.TP
+.B Mod-n
+Switch with the next window
+.TP
+.B Mod-p
+Switch with the previous window
+.TP
+.B Mod-1..0
+Go to the NTH workspace
+.TP
+.B Mod-Shift-1...0
+Send window to the NTH workspace
+.SS Mouse Command
+.TP
+.B Move mouse
+Gives the focus to the window under the cursor
+.SH CUSTOMIZATION
+To customize zwm you must edit with your favorite editor the config.h
+file (C header) and re-compile zwm.
+
+``This keeps it fast, secure and simple.'' - dwm man
+
+.SH SEE ALSO
+dmenu(1), dwm(1), X(7)
+
+.SH LINKS
+http://souitom.org:4242/trac
+http://dwm.suckless.org
+http://suckless.org
+http://tronche.com
+http://sbin.org/doc/Xlib
+
+.SH SPECIAL THANKS TO
+suckless, tronche, sbin.org, polar bears (we saved them !) etc.
