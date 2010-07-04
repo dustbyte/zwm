@@ -19,7 +19,7 @@ LISTSDIR	=	$(LIBDIR)/lists
 LIBDIR		=	libs
 
 CFLAGS		+=	-O2 -Werror -DNDEBUG
-CFLAGS		=	-g3
+#CFLAGS		=	-g3
 CFLAGS		+=	-W -Wall -pedantic -std=c99
 CFLAGS		+=	-D${TYPE} -D_REENTRANT -D__EXTENSIONS__
 CFLAGS		+=	-D_POSIX_PTHREAD_SEMANTICS -D_BSD_SOURCE -D_GNU_SOURCE
@@ -41,7 +41,6 @@ SRCS		=	$(SRCDIR)/commands/kill_client.c	\
 			$(SRCDIR)/commands/spawn.c		\
 			$(SRCDIR)/commands/switch_layout.c	\
 			$(SRCDIR)/commands/workspace.c		\
-			$(SRCDIR)/commands/zmenu_run.c		\
 			$(SRCDIR)/commands/zoom.c		\
 			$(SRCDIR)/layouts/htile.c		\
 			$(SRCDIR)/layouts/mirror.c		\

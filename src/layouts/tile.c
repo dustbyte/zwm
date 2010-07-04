@@ -8,8 +8,8 @@
 void		layout_tile(Wm *wm)
 {
   unsigned int	i;
-  unsigned int	x;
-  unsigned int	y;
+  unsigned int	x = 0;
+  unsigned int	y = 0;
   unsigned int	win_height;
   unsigned int	win_width;
   t_elem	*tmp;

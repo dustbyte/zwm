@@ -341,8 +341,6 @@ void		init_wm(Wm *wm)
   wm->colors.unfocus = get_color(UNFOCUS_COLOR, wm);
   wm->layouts_number = TABLELENGTH(layouts);
   wm->layouts = layouts;
-  wm->zmenu.status = ZMENU_NORMAL;
-  bzero(wm->zmenu.buf, 4096);
   wm->rules = rules;
   wm->rules_nb = TABLELENGTH(rules);
   grab_keys(wm);
