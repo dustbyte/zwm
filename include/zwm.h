@@ -40,7 +40,7 @@ typedef struct		_Zmenu
     ZMENU_RUN
   }			status;
   char			buf[4096];
-  char			**exec_list;
+  t_list		exec_list;
   /* Ajouter conf */
 }			Zmenu;
 
@@ -120,6 +120,7 @@ void		master_size(const Arg *arg);
 void		kill_client(const Arg *arg);
 void		change_desktop(const Arg *arg);
 void		move_window(const Arg *arg);
+void		zmenu_run(const Arg *arg);
 
 /*
 ** Layouts
@@ -129,5 +130,11 @@ void		layout_tile(Wm *wm);
 void		layout_htile(Wm *wm);
 void		layout_monocle(Wm *wm);
 void		layout_mirror(Wm *wm);
+
+/*
+** Zmenu
+*/
+
+int		zmenu(Wm *wm);
 
 #endif		/* !ZWM_H_ */

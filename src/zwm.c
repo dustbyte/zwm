@@ -116,6 +116,7 @@ void		run_wm(Wm *wm)
 
   while (wm->is_running && !XNextEvent(wm->dpy, &event))
     {
+      zmenu(wm);
       if (handlers[event.type])
 	handlers[event.type](wm, &event);
     }
@@ -179,7 +180,6 @@ void		init_wm(Wm *wm)
   wm->layouts = layouts;
   wm->zmenu.status = ZMENU_NORMAL;
   bzero(wm->zmenu.buf, 4096);
-  wm->zmenu.exec_list = NULL;
   grab_keys(wm);
   wa.event_mask = SubstructureNotifyMask|SubstructureRedirectMask;
   XChangeWindowAttributes(wm->dpy, wm->root, CWEventMask, &wa);

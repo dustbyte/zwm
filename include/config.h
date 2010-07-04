@@ -67,6 +67,7 @@ const Key keys[] =
   {ModKey,		XK_8,		change_desktop,	{.val = 7}		},
   {ModKey,		XK_9,		change_desktop,	{.val = 8}		},
   {ModKey,		XK_0,		change_desktop,	{.val = 9}		},
+  {ModKey,		XK_r,		zmenu_run,	{0}			},
 };
 
 #endif		/* !CONFIG_H_ */

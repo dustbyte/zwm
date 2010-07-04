@@ -41,6 +41,7 @@ SRCS		=	$(SRCDIR)/commands/change_desktop.c	\
 			$(SRCDIR)/commands/resize.c		\
 			$(SRCDIR)/commands/spawn.c		\
 			$(SRCDIR)/commands/switch_layout.c	\
+			$(SRCDIR)/commands/zmenu_run.c		\
 			$(SRCDIR)/commands/zoom.c		\
 			$(SRCDIR)/layouts/htile.c		\
 			$(SRCDIR)/layouts/mirror.c		\
@@ -48,6 +49,7 @@ SRCS		=	$(SRCDIR)/commands/change_desktop.c	\
 			$(SRCDIR)/layouts/tile.c		\
 			$(SRCDIR)/tools.c			\
 			$(SRCDIR)/windows.c			\
+			$(SRCDIR)/zmenu.c			\
 			$(SRCDIR)/zwm.c
 
 OBJS		=	$(SRCS:.c=.o)
