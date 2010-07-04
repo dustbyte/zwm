@@ -82,7 +82,6 @@ const Key keys[] =
   WORKSPACE_KEY(	XK_8,				7			)
   WORKSPACE_KEY(	XK_9,				8			)
   WORKSPACE_KEY(	XK_0,				9			)
-  {ModKey,		XK_r,		zmenu_run,	{0}			},
 };
 
 #endif		/* !CONFIG_H_ */

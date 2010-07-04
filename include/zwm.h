@@ -44,22 +44,6 @@ typedef struct		_Colors
   unsigned int		unfocus;
 }			Colors;
 
-typedef struct		_Zmenu
-{
-  enum {
-    ZMENU_NORMAL = 0,
-    ZMENU_CALL,
-    ZMENU_RUN
-  }			status;
-  char			buf[4096];
-  t_list		exec_list;
-  Display		*dpy;
-  int			screen;
-  Window		parent;
-  Window		win;
-  /* Ajouter conf */
-}			Zmenu;
-
 typedef struct		_Wm
 {
   unsigned int		cwrksp;
@@ -74,7 +58,6 @@ typedef struct		_Wm
   unsigned int		layouts_number;
   unsigned int		bar_height;
   struct _Layout	*layouts;
-  struct _Zmenu		zmenu;
   Application		*rules;
   unsigned int		rules_nb;
 }			Wm;

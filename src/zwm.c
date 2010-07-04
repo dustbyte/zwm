@@ -245,7 +245,6 @@ void		run_wm(Wm *wm)
 
   while (wm->is_running && !XNextEvent(wm->dpy, &event))
     {
-      zmenu(wm);
       if (handlers[event.type])
 	handlers[event.type](wm, &event);
     }
