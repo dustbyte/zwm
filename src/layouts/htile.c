@@ -24,8 +24,8 @@ void		layout_htile(Wm *wm)
       win_width = wm->scr_width / cwrksp->windows.size;
       list_foreach_as(cwrksp->windows.head, tmp, (Client *), client)
 	{
-	  XMoveResizeWindow(wm->dpy, client->win, x, wm->bar_height,
-			    win_width - 2, wm->scr_height - 2);
+	  move_resize_window(wm, client, x, wm->bar_height,
+			     win_width - 2, wm->scr_height - 2);
 	  x += win_width;
 	}
     }
@@ -39,8 +39,8 @@ void		layout_htile(Wm *wm)
 	{
 	  if (i < num_master)
 	    {
-	      XMoveResizeWindow(wm->dpy, client->win, x, wm->bar_height,
-				win_width - 2, win_height - 2);
+	      move_resize_window(wm, client, x, wm->bar_height,
+				 win_width - 2, win_height - 2);
 	    }
 	  else
 	    {
@@ -51,8 +51,8 @@ void		layout_htile(Wm *wm)
 		  win_height = wm->scr_height - win_height;
 		  win_width = wm->scr_width / (cwrksp->windows.size - num_master);
 		}
-	      XMoveResizeWindow(wm->dpy, client->win, x, y,
-				win_width - 2, win_height - 2);
+	      move_resize_window(wm, client, x, y,
+				 win_width - 2, win_height - 2);
 	    }
 	  x += win_width;
 	  ++i;

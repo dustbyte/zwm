@@ -14,6 +14,11 @@ typedef struct		_Client
 {
   t_elem		self;
   Window		win;
+  unsigned int		x;
+  unsigned int		y;
+  unsigned int		width;
+  unsigned int		height;
+  unsigned int		border_width;
 }			Client;
 
 typedef struct		_Workspace
@@ -86,26 +91,44 @@ typedef struct		_Key
 ** General
 */
 
+void		configure(Wm *wm, Client *c);
 void		draw(Wm *wm);
 void		undraw(Wm *wm);
 void		redraw(Wm *wm);
+void		sigchld(int unused);
+void		update_wm_hints(Wm *wm, Client *client);
+
 /*
 ** Handlers
 */
 
 void		key_press(Wm *wm, XEvent *event);
 void		map_request(Wm *wm, XEvent *event);
+void		button_press(Wm *wm, XEvent *event);
+void		enter_notify(Wm *wm, XEvent *event);
+void		motion_notify(Wm *wm, XEvent *event);
 void		destroy_notify(Wm *wm, XEvent *event);
+void		configure_request(Wm *wm, XEvent *event);
 void		configure_notify(Wm *wm, XEvent *event);
+void		property_notify(Wm *wm, XEvent *event);
+void		unmap_notitfy(Wm *wm, XEvent *event);
 
 /*
 ** Windows
 */
 
-void		add_window(Wm *wm, Window window);
+Client		*add_window(Wm *wm, Window window);
 void		remove_window(Wm *wm, Client *win);
 Client		*get_window(Wm *wm, Window window);
-
+void		set_win_attributes(Client *client,
+				   unsigned int x, unsigned int y,
+				   unsigned int width, unsigned int height,
+				   unsigned int border_width);
+void		move_resize_window(Wm *wm, Client *client,
+				   unsigned int x, unsigned int y,
+				   unsigned int width, unsigned int height);
+void		base_move_resize_window(Wm *wm, Client *client);
+void		border_width_window(Wm *wm, Client *client, unsigned int width);
 /*
 ** Commands
 */
