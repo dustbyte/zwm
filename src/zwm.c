@@ -8,6 +8,9 @@
 
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
+#include <X11/Xatom.h>
+#include <X11/Xproto.h>
+#include <X11/Xutil.h>
 
 #include "lists.h"
 #include "log.h"
@@ -23,12 +26,17 @@ Wm		wm;
 
 static void	(*handlers[LASTEvent])(Wm *wm, XEvent *event) =
 {
+  [ConfigureRequest] = configure_request,
+  [DestroyNotify] = destroy_notify,
   [KeyPress] = key_press,
   [MapRequest] = map_request,
-  [DestroyNotify] = destroy_notify,
-  [ConfigureRequest] = configure_request,
-  [ConfigureNotify] = configure_notify
+  [PropertyNotify] = property_notify,
+  [UnmapNotify] = unmap_notitfy,
 };
+
+/*
+** Drawing
+*/
 
 void		draw(Wm *wm)
 {
@@ -41,7 +49,7 @@ void		draw(Wm *wm)
     {
       if (client == cur->focus)
 	{
-	  XSetWindowBorderWidth(wm->dpy, client->win, 1);
+	  border_width_window(wm, client, 1);
 	  XSetWindowBorder(wm->dpy, client->win, wm->colors.focus);
 	  XSetInputFocus(wm->dpy,client->win,RevertToParent,CurrentTime);
 	  XRaiseWindow(wm->dpy,client->win);
@@ -49,16 +57,6 @@ void		draw(Wm *wm)
       else
 	XSetWindowBorder(wm->dpy, client->win, wm->colors.unfocus);
     }
-}
-
-void		undraw(Wm *wm)
-{
-  Workspace	*cur = &wm->workspaces[wm->cwrksp];
-  t_elem	*tmp;
-  Client	*client;
-
-  list_foreach_as(cur->windows.head, tmp, (Client *), client)
-    XUnmapWindow(wm->dpy, client->win);
 }
 
 void		redraw(Wm *wm)
@@ -72,60 +70,19 @@ void		redraw(Wm *wm)
   draw(wm);
 }
 
-void		key_press(Wm *wm, XEvent *event)
+void		undraw(Wm *wm)
 {
-  unsigned	i;
-  KeySym	keysym;
-  XKeyEvent	keyevent;
+  Workspace	*cur = &wm->workspaces[wm->cwrksp];
+  t_elem	*tmp;
+  Client	*client;
 
-  keyevent = event->xkey;
-  keysym = XKeycodeToKeysym(wm->dpy, keyevent.keycode, 0);
-
-  for (i = 0; i < TABLELENGTH(keys); ++i)
-    if (keys[i].keysym == keysym && keys[i].mod == keyevent.state)
-      keys[i].func(&keys[i].arg);
+  list_foreach_as(cur->windows.head, tmp, (Client *), client)
+    XUnmapWindow(wm->dpy, client->win);
 }
 
-void		map_request(Wm *wm, XEvent *event)
-{
-  add_window(wm, event->xmaprequest.window);
-  XMapWindow(wm->dpy, event->xmaprequest.window);
-  draw(wm);
-}
-
-void		destroy_notify(Wm *wm, XEvent *event)
-{
-  Client	*win;
-
-  if ((win = get_window(wm, event->xdestroywindow.window)) != NULL)
-    {
-      remove_window(wm, win);
-      XSync(wm->dpy, False);
-      draw(wm);
-    }
-}
-
-void		configure(Wm *wm, Client *c)
-{
-  XConfigureEvent ce;
-  XWindowAttributes attr;
-
-  if (!XGetWindowAttributes(wm->dpy, c->win, &attr))
-    {
-      ce.type = ConfigureNotify;
-      ce.display = wm->dpy;
-      ce.event = c->win;
-      ce.window = c->win;
-      ce.x = attr.x;
-      ce.y = attr.y;
-      ce.width = attr.width;
-      ce.height = attr.height;
-      ce.border_width = attr.border_width;
-      ce.above = None;
-      ce.override_redirect = False;
-      XSendEvent(wm->dpy, c->win, False, StructureNotifyMask, (XEvent *)&ce);
-    }
-}
+/*
+** Event handlers
+*/
 
 void		configure_request(Wm *wm, XEvent *event)
 {
@@ -149,22 +106,93 @@ void		configure_request(Wm *wm, XEvent *event)
   XSync(wm->dpy, False);
 }
 
-void		configure_notify(Wm *wm, XEvent *event)
+void		destroy_notify(Wm *wm, XEvent *event)
 {
-  wlog(RUN | INFO, "Configure Notify");
-  (void)wm;
-  (void)event;
+  Client	*win;
+
+  if ((win = get_window(wm, event->xdestroywindow.window)) != NULL)
+    {
+      remove_window(wm, win);
+      XSync(wm->dpy, False);
+      draw(wm);
+    }
 }
 
-void		run_wm(Wm *wm)
+void		key_press(Wm *wm, XEvent *event)
 {
-  XEvent	event;
+  unsigned	i;
+  KeySym	keysym;
+  XKeyEvent	keyevent;
 
-  while (wm->is_running && !XNextEvent(wm->dpy, &event))
+  keyevent = event->xkey;
+  keysym = XKeycodeToKeysym(wm->dpy, keyevent.keycode, 0);
+
+  for (i = 0; i < TABLELENGTH(keys); ++i)
+    if (keys[i].keysym == keysym && keys[i].mod == keyevent.state)
+      keys[i].func(&keys[i].arg);
+}
+
+void		map_request(Wm *wm, XEvent *event)
+{
+  XMapRequestEvent *ev = &event->xmaprequest;
+  Client	*client = NULL;
+  XWindowAttributes attr;
+
+  if (!XGetWindowAttributes(wm->dpy, ev->window, &attr))
     {
-      if (handlers[event.type])
-	handlers[event.type](wm, &event);
+      wlog(SYS | WARN, "Can't get window's attributes");
+      return ;
     }
+  if (attr.override_redirect)
+    return ;
+  if (get_window(wm, ev->window))
+    return ;
+  client = add_window(wm, ev->window);
+  set_win_attributes(client, attr.x, attr.y, attr.width, attr.height, attr.border_width);
+  XMapWindow(wm->dpy, event->xmaprequest.window);
+  draw(wm);
+}
+
+void		property_notify(Wm *wm, XEvent *event)
+{
+  Client	*c;
+  XPropertyEvent *ev = &event->xproperty;
+
+  if ((c = get_window(wm, ev->window)) != NULL)
+    if (ev->atom == XA_WM_HINTS)
+      update_wm_hints(wm, c);
+}
+
+void		unmap_notitfy(Wm *wm, XEvent *event)
+{
+  Client	*client;
+  XUnmapEvent	*ev = &event->xunmap;
+
+  if ((client = get_window(wm, ev->window)) != NULL)
+    remove_window(wm, client);
+  draw(wm);
+}
+
+/*
+** Tool functions
+*/
+
+void		configure(Wm *wm, Client *c)
+{
+  XConfigureEvent ce;
+
+  ce.type = ConfigureNotify;
+  ce.display = wm->dpy;
+  ce.event = c->win;
+  ce.window = c->win;
+  ce.x = c->x;
+  ce.y = c->y;
+  ce.width = c->width;
+  ce.height = c->height;
+  ce.border_width = c->border_width;
+  ce.above = None;
+  ce.override_redirect = False;
+  XSendEvent(wm->dpy, c->win, False, StructureNotifyMask, (XEvent *)&ce);
 }
 
 void		grab_keys(Wm *wm)
@@ -178,6 +206,36 @@ void		grab_keys(Wm *wm)
 	XGrabKey(wm->dpy, code, keys[i].mod, wm->root, True, GrabModeAsync, GrabModeAsync);
     }
 }
+
+void		run_wm(Wm *wm)
+{
+  XEvent	event;
+
+  while (wm->is_running && !XNextEvent(wm->dpy, &event))
+    {
+      if (handlers[event.type])
+	handlers[event.type](wm, &event);
+    }
+}
+
+void		update_wm_hints(Wm *wm, Client *client)
+{
+  XWMHints	*wmh;
+
+  if ((wmh = XGetWMHints(wm->dpy, client->win)))
+    {
+      if (wmh->flags & XUrgencyHint)
+	{
+	  wmh->flags &= ~XUrgencyHint;
+	  XSetWMHints(wm->dpy, client->win, wmh);
+	}
+      XFree(wmh);
+    }
+}
+
+/*
+** Program life related
+*/
 
 void		free_client(void *elem)
 {
@@ -194,12 +252,6 @@ void		finish_wm(Wm *wm)
   for (i = 0; i < TABLELENGTH(workspaces); i++)
     list_empty(&wm->workspaces[i].windows, free_client);
   XCloseDisplay(wm->dpy);
-}
-
-void sigchld(__attribute__((unused))int unused) {
-  if(signal(SIGCHLD, sigchld) == SIG_ERR)
-    wlog(SYS|ERR, "Can't install SIGCHLD handler");
-  while(0 < waitpid(-1, NULL, WNOHANG));
 }
 
 void		init_wm(Wm *wm)
@@ -230,6 +282,13 @@ void		init_wm(Wm *wm)
   wa.event_mask = SubstructureNotifyMask|SubstructureRedirectMask;
   XChangeWindowAttributes(wm->dpy, wm->root, CWEventMask, &wa);
   XSelectInput(wm->dpy, wm->root, wa.event_mask);
+}
+
+void		sigchld(__attribute__((unused))int unused)
+{
+  if(signal(SIGCHLD, sigchld) == SIG_ERR)
+    wlog(SYS|ERR, "Can't install SIGCHLD handler");
+  while(0 < waitpid(-1, NULL, WNOHANG));
 }
 
 int		main(void)

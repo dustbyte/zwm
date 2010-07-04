@@ -8,20 +8,23 @@
 #include "zwm.h"
 #include "tools.h"
 
-void		add_window(Wm *wm, Window window)
+Client		*add_window(Wm *wm, Window window)
 {
   Client	*win;
+  Workspace	*cur = &wm->workspaces[wm->cwrksp];
 
   if ((win = malloc(sizeof(*win))) == NULL)
     wlog(SYS | ERR, "malloc");
   win->win = window;
-  list_add_head(&wm->workspaces[wm->cwrksp].windows, &win->self, win);
-  wm->workspaces[wm->cwrksp].focus = wm->workspaces[wm->cwrksp].windows.head->data;
+  list_add_head(&cur->windows, &win->self, win);
+  cur->focus = cur->windows.head->data;
+  return (win);
 }
 
 void		remove_window(Wm *wm, Client *win)
 {
   Workspace	*cur = &wm->workspaces[wm->cwrksp];
+
   if (win == cur->focus)
     {
       if (win->self.next != NULL)
@@ -45,4 +48,39 @@ Client		*get_window(Wm *wm, Window window)
     if (win->win == window)
       return (win);
   return (NULL);
+}
+
+void		set_win_attributes(Client *client,
+				   unsigned int x, unsigned int y,
+				   unsigned int width, unsigned int height,
+				   unsigned int border_width)
+{
+  client->x = x;
+  client->y = y;
+  client->width = width;
+  client->height = height;
+  client->border_width = border_width;
+}
+
+void		move_resize_window(Wm *wm, Client *client,
+				   unsigned int x, unsigned int y,
+				   unsigned int width, unsigned int height)
+{
+  set_win_attributes(client, x, y, width, height, client->border_width);
+  base_move_resize_window(wm, client);
+}
+
+void		base_move_resize_window(Wm *wm, Client *client)
+{
+  XMoveResizeWindow(wm->dpy, client->win,
+		    client->x,
+		    client->y,
+		    client->width,
+		    client->height);
+}
+
+void		border_width_window(Wm *wm, Client *client, unsigned int width)
+{
+  client->border_width = width;
+  XSetWindowBorderWidth(wm->dpy, client->win, width);
 }
