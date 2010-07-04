@@ -49,7 +49,6 @@ SRCS		=	$(SRCDIR)/commands/kill_client.c	\
 			$(SRCDIR)/layouts/tile.c		\
 			$(SRCDIR)/tools.c			\
 			$(SRCDIR)/windows.c			\
-			$(SRCDIR)/zmenu.c			\
 			$(SRCDIR)/zwm.c
 
 OBJS		=	$(SRCS:.c=.o)
