@@ -86,6 +86,26 @@ void		undraw(Wm *wm)
 ** Event handlers
 */
 
+/* void		button_press(Wm *wm, XEvent *event) */
+/* { */
+/*   t_elem	*tmp; */
+/*   Client	*client; */
+/*   Window	event_win; */
+/*   Workspace	*cur = &wm->workspaces[wm->cwrksp]; */
+
+/*   event_win = event->xbutton.subwindow; */
+/*   printf("Window button pressed = %d\n", (int) event_win); */
+/*   list_foreach_as(cur->windows.head, tmp, (Client *), client) */
+/*     { */
+/*       if (client->win == event_win) */
+/* 	{ */
+/* 	  cur->focus = client; */
+/* 	  draw(wm); */
+/* 	  break; */
+/* 	} */
+/*     } */
+/* } */
+
 void		configure_request(Wm *wm, XEvent *event)
 {
   Client	*c;
@@ -106,6 +126,28 @@ void		configure_request(Wm *wm, XEvent *event)
   else
     configure(wm, c);
   XSync(wm->dpy, False);
+}
+
+void		enter_notify(Wm *wm, XEvent *event)
+{
+  t_elem	*tmp;
+  Client	*client;
+  Workspace	*cur = &wm->workspaces[wm->cwrksp];
+  XCrossingEvent	enter_event;
+
+  if (FOCUS_FOLLOWS_MOUSE == true)
+    {
+      enter_event = event->xcrossing;
+      list_foreach_as(cur->windows.head, tmp, (Client *), client)
+	{
+	  if (client->win == enter_event.window)
+	    {
+	      cur->focus = client;
+	      draw(wm);
+	      break;
+	    }
+	}
+    }
 }
 
 void		destroy_notify(Wm *wm, XEvent *event)
@@ -134,54 +176,14 @@ void		key_press(Wm *wm, XEvent *event)
       keys[i].func(&keys[i].arg);
 }
 
-/* void		button_press(Wm *wm, XEvent *event) */
-/* { */
-/*   t_elem	*tmp; */
-/*   Client	*client; */
-/*   Window	event_win; */
-/*   Workspace	*cur = &wm->workspaces[wm->cwrksp]; */
-
-/*   event_win = event->xbutton.subwindow; */
-/*   printf("Window button pressed = %d\n", (int) event_win); */
-/*   list_foreach_as(cur->windows.head, tmp, (Client *), client) */
-/*     { */
-/*       if (client->win == event_win) */
-/* 	{ */
-/* 	  cur->focus = client; */
-/* 	  draw(wm); */
-/* 	  break; */
-/* 	} */
-/*     } */
-/* } */
-
-void		enter_notify(Wm *wm, XEvent *event)
-{
-  t_elem	*tmp;
-  Client	*client;
-  Workspace	*cur = &wm->workspaces[wm->cwrksp];
-  XCrossingEvent	enter_event;
-
-  if (FOCUS_FOLLOWS_MOUSE == true)
-    {
-      enter_event = event->xcrossing;
-      list_foreach_as(cur->windows.head, tmp, (Client *), client)
-	{
-	  if (client->win == enter_event.window)
-	    {
-	      cur->focus = client;
-	      draw(wm);
-	      break;
-	    }
-	}
-    }
-}
-
 void		map_request(Wm *wm, XEvent *event)
 {
   XMapRequestEvent *ev = &event->xmaprequest;
-  Client	*client = NULL;
   XWindowAttributes attr;
+  Client	*client = NULL;
+  unsigned int	save_workspace = wm->cwrksp;
 
+  wm->cwrksp = check_rules(wm, ev->window);
   if (!XGetWindowAttributes(wm->dpy, ev->window, &attr))
     {
       wlog(SYS | WARN, "Can't get window's attributes");
@@ -192,8 +194,11 @@ void		map_request(Wm *wm, XEvent *event)
   if (get_window(wm, ev->window))
     return ;
   client = add_window(wm, ev->window);
-  set_win_attributes(client, attr.x, attr.y, attr.width, attr.height, attr.border_width);
-  XMapWindow(wm->dpy, event->xmaprequest.window);
+  set_win_attributes(client, attr.x, attr.y, attr.width,
+		     attr.height, attr.border_width);
+  if (wm->cwrksp == save_workspace)
+    map_window(wm, client);
+  wm->cwrksp = save_workspace;
   XSelectInput(wm->dpy, event->xmaprequest.window, EnterWindowMask);
   draw(wm);
 }
@@ -248,7 +253,8 @@ void		grab_keys(Wm *wm)
   for (i = 0; i < TABLELENGTH(keys); i++)
     {
       if ((code = XKeysymToKeycode(wm->dpy, keys[i].keysym)))
-	XGrabKey(wm->dpy, code, keys[i].mod, wm->root, True, GrabModeAsync, GrabModeAsync);
+	XGrabKey(wm->dpy, code, keys[i].mod, wm->root,
+		 True, GrabModeAsync, GrabModeAsync);
     }
 }
 
@@ -323,6 +329,8 @@ void		init_wm(Wm *wm)
   wm->layouts = layouts;
   wm->zmenu.status = ZMENU_NORMAL;
   bzero(wm->zmenu.buf, 4096);
+  wm->rules = rules;
+  wm->rules_nb = TABLELENGTH(rules);
   grab_keys(wm);
   wa.event_mask = SubstructureNotifyMask|SubstructureRedirectMask;
   XChangeWindowAttributes(wm->dpy, wm->root, CWEventMask, &wa);

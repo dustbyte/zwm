@@ -10,6 +10,12 @@
 
 #define	TABLELENGTH(X) (sizeof((X)) / sizeof(*(X)))
 
+typedef struct		_Application
+{
+  char			*class;
+  unsigned int		workspace;
+}			Application;
+
 typedef struct		_Client
 {
   t_elem		self;
@@ -19,6 +25,7 @@ typedef struct		_Client
   unsigned int		width;
   unsigned int		height;
   unsigned int		border_width;
+  Bool			mapped;
 }			Client;
 
 typedef struct		_Workspace
@@ -68,6 +75,8 @@ typedef struct		_Wm
   unsigned int		bar_height;
   struct _Layout	*layouts;
   struct _Zmenu		zmenu;
+  Application		*rules;
+  unsigned int		rules_nb;
 }			Wm;
 
 typedef struct		_Layout
@@ -123,6 +132,7 @@ void		unmap_notitfy(Wm *wm, XEvent *event);
 
 Client		*add_window(Wm *wm, Window window);
 void		remove_window(Wm *wm, Client *win);
+void		map_window(Wm *wm, Client *client);
 Client		*get_window(Wm *wm, Window window);
 void		set_win_attributes(Client *client,
 				   unsigned int x, unsigned int y,
@@ -133,6 +143,8 @@ void		move_resize_window(Wm *wm, Client *client,
 				   unsigned int width, unsigned int height);
 void		base_move_resize_window(Wm *wm, Client *client);
 void		border_width_window(Wm *wm, Client *client, unsigned int width);
+unsigned int	check_rules(Wm *wm, Window win);
+
 /*
 ** Commands
 */

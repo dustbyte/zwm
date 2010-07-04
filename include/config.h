@@ -37,6 +37,16 @@ Workspace	workspaces[] =
     SET_WORKSPACE("0"),
   };
 
+/*
+** Set on which workspaces a class is affected in, starting by 0
+*/
+
+Application	rules[] =
+  {
+    {"Firefox",		2},
+    {"Emacs",		1}
+  };
+
 const char *xtermcmd[] = {"xterm", NULL};
 const char *dmenucmd[] =
   {"dmenu_run", "-nb", "#252525", "-nf", "#e3e3e3", "-sb", "#1e5e8a"};
