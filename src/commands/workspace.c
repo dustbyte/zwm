@@ -11,9 +11,12 @@ void		change_workspace(const Arg *arg)
 {
   unsigned int	wrksp = arg->val;
 
-  undraw(&wm);
-  wm.cwrksp = wrksp;
-  draw(&wm);
+  if (wm.cwrksp != wrksp)
+    {
+      undraw(&wm);
+      wm.cwrksp = wrksp;
+      draw(&wm);
+    }
 }
 
 void		show_client(void *c)
