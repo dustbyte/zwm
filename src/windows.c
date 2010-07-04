@@ -82,6 +82,12 @@ void		map_window(Wm *wm, Client *client)
   client->mapped = true;
 }
 
+void		unmap_window(Wm *wm, Client *client)
+{
+  XUnmapWindow(wm->dpy, client->win);
+  client->mapped = false;
+}
+
 void		base_move_resize_window(Wm *wm, Client *client)
 {
   XMoveResizeWindow(wm->dpy, client->win,

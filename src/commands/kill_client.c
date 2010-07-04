@@ -19,6 +19,7 @@ void		kill_client(__attribute__((unused))const Arg *arg)
 	cur->focus = focus->self.next->data;
       else if (clients->size > 0)
 	cur->focus = clients->head->data;
+      unmap_window(&wm, focus);
       XKillClient(wm.dpy, focus->win);
       remove_window(&wm, focus);
       XSync(wm.dpy, False);

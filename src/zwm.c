@@ -49,6 +49,8 @@ void		draw(Wm *wm)
   layouts[cur->layout].func(wm);
   list_foreach_as(cur->windows.head, tmp, (Client *), client)
     {
+      if (!client->mapped)
+	map_window(wm, client);
       if (client == cur->focus)
 	{
 	  border_width_window(wm, client, 1);
@@ -63,12 +65,7 @@ void		draw(Wm *wm)
 
 void		redraw(Wm *wm)
 {
-  Workspace	*cur = &wm->workspaces[wm->cwrksp];
-  t_elem	*tmp;
-  Client	*client;
-
-  list_foreach_as(cur->windows.head, tmp, (Client *), client)
-    XMapWindow(wm->dpy, client->win);
+  undraw(wm);
   draw(wm);
 }
 
@@ -79,7 +76,7 @@ void		undraw(Wm *wm)
   Client	*client;
 
   list_foreach_as(cur->windows.head, tmp, (Client *), client)
-    XUnmapWindow(wm->dpy, client->win);
+    unmap_window(wm, client);
 }
 
 /*
@@ -196,10 +193,9 @@ void		map_request(Wm *wm, XEvent *event)
   client = add_window(wm, ev->window);
   set_win_attributes(client, attr.x, attr.y, attr.width,
 		     attr.height, attr.border_width);
-  if (wm->cwrksp == save_workspace)
-    map_window(wm, client);
   wm->cwrksp = save_workspace;
   XSelectInput(wm->dpy, event->xmaprequest.window, EnterWindowMask);
+  XSync(wm->dpy, false);
   draw(wm);
 }
 
@@ -293,6 +289,7 @@ void		free_client(void *elem)
 {
   Client	*client = (Client *)elem;
 
+  unmap_window(&wm, elem);
   XKillClient(wm.dpy, client->win);
   free(client);
 }

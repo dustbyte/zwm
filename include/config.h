@@ -44,12 +44,16 @@ Workspace	workspaces[] =
 Application	rules[] =
   {
     {"Firefox",		2},
-    {"Emacs",		1}
+    {"Gvim",		1}
   };
 
 const char *xtermcmd[] = {"xterm", NULL};
 const char *dmenucmd[] =
   {"dmenu_run", "-nb", "#252525", "-nf", "#e3e3e3", "-sb", "#1e5e8a"};
+
+#define	WORKSPACE_KEY(KEY, WRKSP)					\
+  {ModKey,		(KEY),		change_workspace,	{.val = WRKSP}	}, \
+  {ModKey|ShiftMask,	(KEY),		move_to_workspace,	{.val = WRKSP}	},
 
 const Key keys[] =
 {
@@ -68,16 +72,16 @@ const Key keys[] =
   {ModKey|ShiftMask,	XK_q,		kill_client,	{0}			},
   {ModKey,		XK_n,		move_window,	{.val = +1}		},
   {ModKey,		XK_p,		move_window,	{.val = -1}		},
-  {ModKey,		XK_1,		change_desktop,	{.val = 0}		},
-  {ModKey,		XK_2,		change_desktop,	{.val = 1}		},
-  {ModKey,		XK_3,		change_desktop,	{.val = 2}		},
-  {ModKey,		XK_4,		change_desktop,	{.val = 3}		},
-  {ModKey,		XK_5,		change_desktop,	{.val = 4}		},
-  {ModKey,		XK_6,		change_desktop,	{.val = 5}		},
-  {ModKey,		XK_7,		change_desktop,	{.val = 6}		},
-  {ModKey,		XK_8,		change_desktop,	{.val = 7}		},
-  {ModKey,		XK_9,		change_desktop,	{.val = 8}		},
-  {ModKey,		XK_0,		change_desktop,	{.val = 9}		},
+  WORKSPACE_KEY(	XK_1,				0			)
+  WORKSPACE_KEY(	XK_2,				1			)
+  WORKSPACE_KEY(	XK_3,				2			)
+  WORKSPACE_KEY(	XK_4,				3			)
+  WORKSPACE_KEY(	XK_5,				4			)
+  WORKSPACE_KEY(	XK_6,				5			)
+  WORKSPACE_KEY(	XK_7,				6			)
+  WORKSPACE_KEY(	XK_8,				7			)
+  WORKSPACE_KEY(	XK_9,				8			)
+  WORKSPACE_KEY(	XK_0,				9			)
   {ModKey,		XK_r,		zmenu_run,	{0}			},
 };
 

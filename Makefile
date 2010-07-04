@@ -32,8 +32,7 @@ LDFLAGS		=	-L/usr/X11R6/lib -lX11 -L$(LIBDIR) -llog -llists			\
 SRCDIR		=	src
 HDRDIR		=	include
 
-SRCS		=	$(SRCDIR)/commands/change_desktop.c	\
-			$(SRCDIR)/commands/kill_client.c	\
+SRCS		=	$(SRCDIR)/commands/kill_client.c	\
 			$(SRCDIR)/commands/master_size.c	\
 			$(SRCDIR)/commands/move_focus.c		\
 			$(SRCDIR)/commands/move_window.c	\
@@ -41,6 +40,7 @@ SRCS		=	$(SRCDIR)/commands/change_desktop.c	\
 			$(SRCDIR)/commands/resize.c		\
 			$(SRCDIR)/commands/spawn.c		\
 			$(SRCDIR)/commands/switch_layout.c	\
+			$(SRCDIR)/commands/workspace.c		\
 			$(SRCDIR)/commands/zmenu_run.c		\
 			$(SRCDIR)/commands/zoom.c		\
 			$(SRCDIR)/layouts/htile.c		\

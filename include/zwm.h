@@ -133,6 +133,7 @@ void		unmap_notitfy(Wm *wm, XEvent *event);
 Client		*add_window(Wm *wm, Window window);
 void		remove_window(Wm *wm, Client *win);
 void		map_window(Wm *wm, Client *client);
+void		unmap_window(Wm *wm, Client *client);
 Client		*get_window(Wm *wm, Window window);
 void		set_win_attributes(Client *client,
 				   unsigned int x, unsigned int y,
@@ -157,7 +158,8 @@ void		switch_layout(const Arg *arg);
 void		zoom(const Arg *arg);
 void		master_size(const Arg *arg);
 void		kill_client(const Arg *arg);
-void		change_desktop(const Arg *arg);
+void		change_workspace(const Arg *arg);
+void		move_to_workspace(const Arg *arg);
 void		move_window(const Arg *arg);
 void		zmenu_run(const Arg *arg);
 
