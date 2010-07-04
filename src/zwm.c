@@ -31,7 +31,6 @@ static void	(*handlers[LASTEvent])(Wm *wm, XEvent *event) =
   [MapRequest] = map_request,
   [DestroyNotify] = destroy_notify,
   [EnterNotify] = enter_notify,
-  /* [ButtonPress] = button_press, */
   [PropertyNotify] = property_notify,
   [UnmapNotify] = unmap_notitfy,
 };
@@ -82,26 +81,6 @@ void		undraw(Wm *wm)
 /*
 ** Event handlers
 */
-
-/* void		button_press(Wm *wm, XEvent *event) */
-/* { */
-/*   t_elem	*tmp; */
-/*   Client	*client; */
-/*   Window	event_win; */
-/*   Workspace	*cur = &wm->workspaces[wm->cwrksp]; */
-
-/*   event_win = event->xbutton.subwindow; */
-/*   printf("Window button pressed = %d\n", (int) event_win); */
-/*   list_foreach_as(cur->windows.head, tmp, (Client *), client) */
-/*     { */
-/*       if (client->win == event_win) */
-/* 	{ */
-/* 	  cur->focus = client; */
-/* 	  draw(wm); */
-/* 	  break; */
-/* 	} */
-/*     } */
-/* } */
 
 void		configure_request(Wm *wm, XEvent *event)
 {
