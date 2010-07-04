@@ -32,7 +32,7 @@ static void	(*handlers[LASTEvent])(Wm *wm, XEvent *event) =
   [DestroyNotify] = destroy_notify,
   [EnterNotify] = enter_notify,
   /* [ButtonPress] = button_press, */
-  [ConfigureNotify] = configure_notify
+  [ConfigureNotify] = configure_notify,
   [PropertyNotify] = property_notify,
   [UnmapNotify] = unmap_notitfy,
 };
