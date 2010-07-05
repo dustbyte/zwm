@@ -52,7 +52,7 @@ static void	raw_log(t_loglvl lvl, const char *fmt, va_list ap)
   FILE		*output;
 
   init();
-  for (f = 0; (f <= ERR_FORMAT_MAX); f++)
+  for (f = 0; (f < ERR_FORMAT_MAX); f++)
     if (err_format[f].type & lvl)
       break;
   if (f == ERR_FORMAT_MAX)
