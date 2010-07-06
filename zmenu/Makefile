@@ -2,6 +2,8 @@ TYPE		=	$(shell uname -s)
 TYPE		!=	uname -s
 
 NAME		=	zmenu
+NAME_PATH	=	$(NAME)_path
+NAME_RUN	=	$(NAME)_run
 
 CC		=	gcc
 CD		=	cd
@@ -14,6 +16,8 @@ LISTS		=	liblists.a
 LISTSDIR	=	$(LIBDIR)/lists
 
 LIBDIR		=	../libs
+
+INSTALLDIR	=	$(HOME)/bin
 
 CFLAGS		+=	-O2 -Werror -DNDEBUG
 CFLAGS		=	-g3
@@ -50,6 +54,16 @@ clean_lib_lists:
 # Common ----------------------------------------------------------------------
 
 all:			$(NAME)
+
+install:		all
+			$(CP) $(NAME) $(INSTALLDIR)/$(NAME)
+			$(CP) $(NAME_PATH) $(INSTALLDIR)/$(NAME_PATH)
+			$(CP) $(NAME_RUN) $(INSTALLDIR)/$(NAME_RUN)
+
+deinstall:
+			$(RM) $(INSTALLDIR)/$(NAME)
+			$(RM) $(INSTALLDIR)/$(NAME_PATH)
+			$(RM) $(INSTALLDIR)/$(NAME_RUN)
 
 clean:
 			$(RM) $(OBJS)

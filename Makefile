@@ -18,6 +18,8 @@ LISTSDIR	=	$(LIBDIR)/lists
 
 LIBDIR		=	libs
 
+INSTALLDIR	=	$(HOME)/bin
+
 CFLAGS		+=	-O2 -Werror -DNDEBUG
 #CFLAGS		=	-g3
 CFLAGS		+=	-W -Wall -pedantic -std=c99
@@ -75,6 +77,12 @@ clean_lib_lists:
 # Common ----------------------------------------------------------------------
 
 all:			$(NAME)
+
+install:		all
+			$(CP) $(NAME) $(INSTALLDIR)/$(NAME)
+
+deinstall:
+			$(RM) $(INSTALLDIR)/$(NAME)
 
 clean:
 			$(RM) $(OBJS)
