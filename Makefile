@@ -26,8 +26,7 @@ CFLAGS		+=	-D_POSIX_PTHREAD_SEMANTICS -D_BSD_SOURCE -D_GNU_SOURCE
 
 CFLAGS		+=	-I$(HDRDIR) -I/usr/X11R6/include -I$(LOGDIR)/include -I$(LISTSDIR)/include
 
-LDFLAGS		=	-L/usr/X11R6/lib -lX11 -L$(LIBDIR) -llog -llists			\
-			-Wl,--start-group $(LIBDIR)/$(LOG) $(LIBDIR)/$(LISTS) --end-group
+LDFLAGS		=	-L/usr/X11R6/lib -lX11 -L$(LIBDIR) -llog -llists
 
 SRCDIR		=	src
 HDRDIR		=	include

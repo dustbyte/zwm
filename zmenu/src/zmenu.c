@@ -127,11 +127,11 @@ void		key_press(ZMenu *zm, XKeyEvent *key)
       zm->is_running = false;
       break ;
     case XK_Right:
-      if (zm->selected->self.next != NULL)
+      if (zm->selected && zm->selected->self.next != NULL)
 	zm->selected = zm->selected->self.next->data;
       break ;
     case XK_Left:
-      if (zm->selected->self.prev != NULL)
+      if (zm->selected && zm->selected->self.prev != NULL)
 	zm->selected = zm->selected->self.prev->data;
       break ;
     default:
