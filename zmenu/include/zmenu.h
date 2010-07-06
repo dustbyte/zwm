@@ -47,15 +47,21 @@ typedef struct	_ZMenu
   DrawConf	dconf;
   Bool		is_running;
   t_list	items;
+  Item		*selected;
   unsigned int	max;
 }		ZMenu;
 
 GC		create_gc(ZMenu *zm, unsigned int bg, unsigned int fg);
 void		create_widow(ZMenu *zm);
 void		die(const char *fmt, ...);
+void		finish(ZMenu *zm);
 unsigned long	get_color(ZMenu *zm, const char *color);
+void		grab_keyboard(ZMenu *zm);
 int		item_cmp(void *item1, void *item2);
+void		item_free(void *it);
+void		item_shot(void *it);
 void		read_stdin(ZMenu *zm);
+void		run(ZMenu *zm);
 void		setup(ZMenu *zm, Conf *conf);
 void		setup_conf(int ac, char **av, Conf *conf);
 void		usage(void);

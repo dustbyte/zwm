@@ -1,3 +1,5 @@
+#include <unistd.h>
+
 #include <stdarg.h>
 
 #include <stdbool.h>
@@ -49,6 +51,22 @@ void		die(const char *fmt, ...)
   exit(EXIT_FAILURE);
 }
 
+void		finish(ZMenu *zm)
+{
+  if (zm->selected != NULL)
+    {
+      printf("%s", zm->selected->name);
+      fflush(stdout);
+    }
+  list_empty(&zm->items, item_free);
+  XFreeGC(zm->dpy, zm->dconf.normal);
+  XFreeGC(zm->dpy, zm->dconf.selected);
+  XFreeFont(zm->dpy, zm->dconf.font_info);
+  XUngrabKeyboard(zm->dpy, CurrentTime);
+  XDestroyWindow(zm->dpy, zm->win);
+  XCloseDisplay(zm->dpy);
+}
+
 unsigned long	get_color(ZMenu *zm, const char *color)
 {
   XColor	c;
@@ -60,6 +78,18 @@ unsigned long	get_color(ZMenu *zm, const char *color)
   return (c.pixel);
 }
 
+void		grab_keyboard(ZMenu *zm)
+{
+  size_t	len;
+
+  for(len = 1000; len; len--)
+    if(XGrabKeyboard(zm->dpy, zm->root, True,
+		     GrabModeAsync, GrabModeAsync, CurrentTime) == GrabSuccess)
+      return ;
+  usleep(1000);
+  die("Cannot grab keyboard\n");
+}
+
 int		item_cmp(void *item1, void *item2)
 {
   Item		*i1 = item1, *i2 = item2;
@@ -67,12 +97,55 @@ int		item_cmp(void *item1, void *item2)
   return (strcmp(i2->name, i1->name));
 }
 
+void		item_free(void *it)
+{
+  Item		*item = it;
+
+  free(item->name);
+  free(item);
+}
+
+void		item_show(void *it)
+{
+  Item		*item = it;
+
+  printf("name = %s\n", item->name);
+}
+
+void		key_press(ZMenu *zm, XKeyEvent *key)
+{
+  KeySym	key_sym;
+
+  key_sym = XKeycodeToKeysym(zm->dpy, key->keycode, 0);
+  switch (key_sym)
+    {
+    case XK_Escape:
+      zm->is_running = false;
+      zm->selected = NULL;
+      break;
+    case XK_Return:
+      zm->is_running = false;
+      break ;
+    case XK_Right:
+      if (zm->selected->self.next != NULL)
+	zm->selected = zm->selected->self.next->data;
+      break ;
+    case XK_Left:
+      if (zm->selected->self.prev != NULL)
+	zm->selected = zm->selected->self.prev->data;
+      break ;
+    default:
+      break ;
+    }
+  if (zm->selected)
+    item_show(zm->selected);
+}
+
 void		read_stdin(ZMenu *zm)
 {
   char		buf[BUFSIZE];
   size_t	len;
   Item		*item;
-  t_elem	*tmp;
 
   list_init(&zm->items);
   while (fgets(buf, BUFSIZE, stdin) != NULL)
@@ -87,19 +160,24 @@ void		read_stdin(ZMenu *zm)
 	die("strdup");
       list_insert(&zm->items, &item->self, item, item_cmp);
     }
-  list_foreach_as(zm->items.head, tmp, (Item *), item)
-    printf("%s\n", item->name);
+  zm->selected = zm->items.head->data;
 }
 
-/* void		run(ZMenu *zm) */
-/* { */
-/*   XEvent	ev; */
+void		run(ZMenu *zm)
+{
+  XEvent	ev;
 
-/*   while (zm->is_running && !XNextEvent(&ev)) */
-/*     { */
-
-/*     } */
-/* } */
+  while (zm->is_running && !XNextEvent(zm->dpy, &ev))
+    {
+      switch (ev.type)
+	{
+	case KeyPress:
+	  key_press(zm, &ev.xkey);
+	default:
+	  break ;
+	}
+    }
+}
 
 void		setup(ZMenu *zm, Conf *conf)
 {
@@ -107,6 +185,7 @@ void		setup(ZMenu *zm, Conf *conf)
   int		scr_height;
 
   zm->is_running = true;
+  zm->selected = NULL;
   zm->max = 0;
   zm->conf = conf;
   if (zm->conf->width == 0)
@@ -131,6 +210,7 @@ void		setup(ZMenu *zm, Conf *conf)
   scr_width = DisplayWidth(zm->dpy, zm->root);
   scr_height = DisplayHeight(zm->dpy, zm->root);
   XMapRaised(zm->dpy, zm->win);
+  grab_keyboard(zm);
 }
 
 void		setup_conf(int ac, char **av, Conf *conf)
@@ -177,5 +257,7 @@ int		main(int ac, char **av)
 
   setup_conf(ac, av, &conf);
   setup(&zm, &conf);
+  run(&zm);
+  finish(&zm);
   return (EXIT_SUCCESS);
 }
