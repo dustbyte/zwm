@@ -9,7 +9,6 @@
 #include "log.h"
 #include "lists.h"
 #include "zwm.h"
-#include "tools.h"
 
 Client		*add_window(Wm *wm, Window window)
 {

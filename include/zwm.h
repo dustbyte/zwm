@@ -90,8 +90,11 @@ typedef struct		_Key
 Bool		add_client(Wm *wm, Window win);
 void		configure(Wm *wm, Client *c);
 void		draw(Wm *wm);
+unsigned long	get_color(const char *color, Wm *wm);
+void		grab_keys(Wm *wm);
 void		undraw(Wm *wm);
 void		redraw(Wm *wm);
+void		run_wm(Wm *wm);
 void		scan_windows(Wm *wm);
 void		sigchld(int unused);
 void		update_wm_hints(Wm *wm, Client *client);
@@ -146,7 +149,6 @@ void		kill_client(const Arg *arg);
 void		change_workspace(const Arg *arg);
 void		move_to_workspace(const Arg *arg);
 void		move_window(const Arg *arg);
-void		zmenu_run(const Arg *arg);
 
 /*
 ** Layouts
@@ -156,11 +158,5 @@ void		layout_tile(Wm *wm);
 void		layout_htile(Wm *wm);
 void		layout_monocle(Wm *wm);
 void		layout_mirror(Wm *wm);
-
-/*
-** Zmenu
-*/
-
-int		zmenu(Wm *wm);
 
 #endif		/* !ZWM_H_ */

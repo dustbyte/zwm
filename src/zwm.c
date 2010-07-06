@@ -15,7 +15,6 @@
 #include "lists.h"
 #include "log.h"
 #include "zwm.h"
-#include "tools.h"
 #include "config.h"
 
 /*
@@ -224,6 +223,17 @@ void		configure(Wm *wm, Client *c)
   ce.above = None;
   ce.override_redirect = False;
   XSendEvent(wm->dpy, c->win, False, StructureNotifyMask, (XEvent *)&ce);
+}
+
+unsigned long	get_color(const char *color, Wm *wm)
+{
+  XColor	c;
+  Colormap	map;
+
+  map = DefaultColormap(wm->dpy, wm->screen);
+  if (!XAllocNamedColor(wm->dpy, map, color, &c, &c))
+    wlog(XLIB | ERR, "Bad color %s", color);
+  return (c.pixel);
 }
 
 void		grab_keys(Wm *wm)

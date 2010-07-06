@@ -45,7 +45,6 @@ SRCS		=	$(SRCDIR)/commands/kill_client.c	\
 			$(SRCDIR)/layouts/mirror.c		\
 			$(SRCDIR)/layouts/monocle.c		\
 			$(SRCDIR)/layouts/tile.c		\
-			$(SRCDIR)/tools.c			\
 			$(SRCDIR)/windows.c			\
 			$(SRCDIR)/zwm.c
 
