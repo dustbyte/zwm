@@ -1,0 +1,39 @@
+#!/bin/sh
+
+CACHE_FILE=$HOME/.zmenu_cache
+IFS=:
+
+cache_up_to_date()
+{
+    if [ -f "$CACHE_FILE" ]
+    then
+	for dir in $PATH
+	do
+	    if [ "$CACHE_FILE" -nt $dir ]
+	    then
+		return 1;
+	    fi
+	done
+    fi
+}
+
+update_cache()
+{
+    if cache_up_to_date
+    then
+	for dir in $PATH
+	do
+	    cd "$dir" 2>/dev/null &&
+	    for file in *
+	    do
+		if [ -x "$file" ]
+		then
+		    echo "$file"
+		fi
+	    done
+	done | sort | uniq  > "$CACHE_FILE"
+    fi
+}
+
+update_cache
+cat "$CACHE_FILE"

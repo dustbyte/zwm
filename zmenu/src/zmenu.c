@@ -1,15 +1,16 @@
 #include <unistd.h>
 
 #include <stdarg.h>
-
 #include <stdbool.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 #include <X11/X.h>
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
+#include <X11/Xutil.h>
 
 
 #include "lists.h"
@@ -108,6 +109,7 @@ void		finish(ZMenu *zm)
       printf("%s", zm->selected->name);
       fflush(stdout);
     }
+  list_empty(&zm->match, list_free_fake);
   list_empty(&zm->items, item_free);
   XFreeGC(zm->dpy, zm->dconf.gc);
   XFreeFont(zm->dpy, zm->dconf.font_info);
@@ -162,32 +164,52 @@ void		item_show(void *it)
 
 void		key_press(ZMenu *zm, XKeyEvent *key)
 {
+  char		buf[10];
   KeySym	key_sym;
+  size_t	num;
 
-  key_sym = XKeycodeToKeysym(zm->dpy, key->keycode, 0);
-  switch (key_sym)
+  memset(buf, 0, 10);
+  num = XLookupString(key, buf, 10, &key_sym, NULL);
+  buf[num] = '\0';
+  if (!iscntrl((int)buf[0]))
     {
-    case XK_Escape:
-      zm->is_running = false;
-      zm->selected = NULL;
-      break;
-    case XK_Return:
-      zm->is_running = false;
-      break ;
-    case XK_Right:
-      if (zm->selected && zm->selected->self.next != NULL)
-	zm->selected = zm->selected->self.next->data;
-      break ;
-    case XK_Left:
-      if (zm->selected && zm->selected->self.prev != NULL)
-	zm->selected = zm->selected->self.prev->data;
-      break ;
-    default:
-      break ;
+      strlcpy(zm->buf + zm->pos, buf, zm->max);
+      zm->pos += num;
+      zm->buf[zm->pos] = '|';
+      update_match(zm);
+    }
+  else
+    {
+      switch (key_sym)
+	{
+	case XK_BackSpace:
+	  if (zm->pos)
+	    {
+	      zm->buf[zm->pos--] = 0;
+	      zm->buf[zm->pos] = '|';
+	      update_match(zm);
+	    }
+	  break ;
+	case XK_Escape:
+	  zm->is_running = false;
+	  zm->selected = NULL;
+	  break;
+	case XK_Return:
+	  zm->is_running = false;
+	  break ;
+	case XK_Right:
+	  if (zm->selected && zm->selected->self.next != NULL)
+	    zm->selected = zm->selected->self.next->data;
+	  break ;
+	case XK_Left:
+	  if (zm->selected && zm->selected->self.prev != NULL)
+	    zm->selected = zm->selected->self.prev->data;
+	  break ;
+	default:
+	  break ;
+	}
     }
   draw_menu(zm);
-  if (zm->selected)
-    item_show(zm->selected);
 }
 
 void		read_stdin(ZMenu *zm)
@@ -246,6 +268,8 @@ void		setup(ZMenu *zm, Conf *conf)
   zm->conf = conf;
   zm->cmp = zm->conf->icase == true ? strncasecmp : strncmp;
   memset(zm->buf, 0, BUFSIZE);
+  zm->pos = 0;
+  zm->buf[0] = '|';
   list_init(&zm->items);
   list_init(&zm->match);
 
@@ -310,6 +334,26 @@ void		setup_conf(int ac, char **av, Conf *conf)
 int		text_width(ZMenu *zm, char *str)
 {
   return (XTextWidth(zm->dconf.font_info, str, strlen(str)));
+}
+
+void		update_match(ZMenu *zm)
+{
+  size_t	len;
+  t_elem	*tmp;
+  Item		*item;
+
+  if ((len = strlen(zm->buf) - 1))
+    {
+      list_foreach_as(zm->items.head, tmp, (Item *), item)
+	if (!zm->cmp(item->name, zm->buf, len))
+	  break ;
+      if (tmp)
+	zm->selected = item;
+      else
+	zm->selected = NULL;
+    }
+  else
+    zm->selected = zm->items.head->data;
 }
 
 void		usage(void)

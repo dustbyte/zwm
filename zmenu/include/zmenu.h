@@ -71,6 +71,7 @@ typedef struct	_ZMenu
   Drawable	dw;
   unsigned int	max;
   char		buf[BUFSIZE];
+  size_t	pos;
 }		ZMenu;
 
 GC		create_gc(ZMenu *zm, unsigned int bg, unsigned int fg);
@@ -89,6 +90,7 @@ void		run(ZMenu *zm);
 void		setup(ZMenu *zm, Conf *conf);
 void		setup_conf(int ac, char **av, Conf *conf);
 int		text_width(ZMenu *zm, char *str);
+void		update_match(ZMenu *zm);
 void		usage(void);
 
 #endif		/* !ZMENU_H_ */

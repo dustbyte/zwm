@@ -1,0 +1,9 @@
+#!/bin/sh
+
+zm_path=zmenu_path
+zm_bin=zmenu
+
+test $# -gt 0 &&zm_path=$1 &&
+test $# -gt 1 && zm_bin=$2
+
+$zm_path | $zm_bin
