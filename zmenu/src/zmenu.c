@@ -30,12 +30,13 @@ GC		create_gc(ZMenu *zm, unsigned int bg, unsigned int fg)
 void		create_widow(ZMenu *zm)
 {
   XSetWindowAttributes wa;
+  int		y = (zm->conf->top == true) ? 0 : zm->scr_height - zm->conf->height;
 
   wa.override_redirect = True;
   wa.background_pixmap = ParentRelative;
   wa.event_mask = ExposureMask | ButtonPressMask | KeyPressMask | VisibilityChangeMask;
   zm->win = XCreateWindow(zm->dpy, zm->root,
-			  zm->conf->x, zm->conf->y, zm->conf->width, zm->conf->height, 0,
+			  zm->conf->x, y, zm->conf->width, zm->conf->height, 0,
 			  DefaultDepth(zm->dpy, zm->screen), CopyFromParent,
 			  DefaultVisual(zm->dpy, zm->screen),
 			  CWOverrideRedirect | CWBackPixmap | CWEventMask, &wa);
@@ -51,6 +52,55 @@ void		die(const char *fmt, ...)
   exit(EXIT_FAILURE);
 }
 
+void		draw_menu(ZMenu *zm)
+{
+  Dims		dims, cpy;
+  t_elem	*tmp;
+  Item		*item;
+
+  dims.x = zm->conf->x;
+  dims.y = (zm->conf->top == true) ? 0 : zm->scr_height - zm->conf->height;
+  dims.width = zm->conf->width;
+  dims.height = zm->conf->height;
+  cpy = dims;
+  dims.x += draw_text(zm, &zm->dconf.n, &dims, NULL);
+  draw_text(zm, &zm->dconf.n, &dims, zm->buf);
+  dims.x = zm->max + zm->conf->space;
+  if (zm->selected)
+    {
+      dims.x += draw_text(zm, &zm->dconf.s, &dims, zm->selected->name);
+      list_foreach_as(zm->selected->self.next, tmp, (Item *), item)
+	{
+	  if (dims.x > zm->conf->width - zm->conf->x - text_width(zm, item->name))
+	    break ;
+	  dims.x += draw_text(zm, &zm->dconf.n, &dims, item->name);
+	}
+    }
+  XCopyArea(zm->dpy, zm->dw, zm->win, zm->dconf.gc,
+	    cpy.x, cpy.y, cpy.width, cpy.height, 0, 0);
+}
+
+int		draw_text(ZMenu *zm, Color *color, Dims *dims, char *str)
+{
+  size_t	len;
+  int		x, y, h;
+  XRectangle	rec = { dims->x, dims->y, dims->width, dims->height};
+
+  h = zm->dconf.font_info->ascent + zm->dconf.font_info->descent;
+  if (str)
+    rec.width = text_width(zm, str) + h;
+  XSetForeground(zm->dpy, zm->dconf.gc, color->bg);
+  XFillRectangles(zm->dpy, zm->dw, zm->dconf.gc, &rec, 1);
+  if (!str)
+    return (0);
+  len = strlen(str);
+  y = dims->y + ((h + 2) / 2) + zm->dconf.font_info->ascent;
+  x = dims->x + (h / 2);
+  XSetForeground(zm->dpy, zm->dconf.gc, color->fg);
+  XDrawString(zm->dpy, zm->dw, zm->dconf.gc, x, y, str, len);
+  return (rec.width);
+}
+
 void		finish(ZMenu *zm)
 {
   if (zm->selected != NULL)
@@ -59,8 +109,7 @@ void		finish(ZMenu *zm)
       fflush(stdout);
     }
   list_empty(&zm->items, item_free);
-  XFreeGC(zm->dpy, zm->dconf.normal);
-  XFreeGC(zm->dpy, zm->dconf.selected);
+  XFreeGC(zm->dpy, zm->dconf.gc);
   XFreeFont(zm->dpy, zm->dconf.font_info);
   XUngrabKeyboard(zm->dpy, CurrentTime);
   XDestroyWindow(zm->dpy, zm->win);
@@ -75,8 +124,7 @@ unsigned long	get_color(ZMenu *zm, const char *color)
   map = DefaultColormap(zm->dpy, zm->screen);
   if (!XAllocNamedColor(zm->dpy, map, color, &c, &c))
     die(PROGNAME"-"VERSION" cannot alloc color %s\n", color);
-  return (c.pixel);
-}
+  return (c.pixel);}
 
 void		grab_keyboard(ZMenu *zm)
 {
@@ -137,6 +185,7 @@ void		key_press(ZMenu *zm, XKeyEvent *key)
     default:
       break ;
     }
+  draw_menu(zm);
   if (zm->selected)
     item_show(zm->selected);
 }
@@ -145,15 +194,18 @@ void		read_stdin(ZMenu *zm)
 {
   char		buf[BUFSIZE];
   size_t	len;
+  size_t	xlen;
   Item		*item;
 
-  list_init(&zm->items);
   while (fgets(buf, BUFSIZE, stdin) != NULL)
     {
       len = strlen(buf);
-      zm->max = len > zm->max ? len : zm->max;
       if (buf[len - 1] == '\n')
-	buf[len - 1] = '\0';
+	buf[--len] = '\0';
+      if (!len)
+	return ;
+      xlen = text_width(zm, buf);
+      zm->max = xlen > zm->max ? xlen : zm->max;
       if ((item = malloc(sizeof(*item))) == NULL)
 	die("malloc");
       if ((item->name = strdup(buf)) == NULL)
@@ -171,8 +223,15 @@ void		run(ZMenu *zm)
     {
       switch (ev.type)
 	{
+	case Expose:
+	  if (ev.xexpose.count == 0)
+	    draw_menu(zm);
+	  break ;
 	case KeyPress:
 	  key_press(zm, &ev.xkey);
+	case VisibilityNotify:
+	  if (ev.xvisibility.state != VisibilityUnobscured)
+	    XRaiseWindow(zm->dpy, zm->win);
 	default:
 	  break ;
 	}
@@ -181,36 +240,42 @@ void		run(ZMenu *zm)
 
 void		setup(ZMenu *zm, Conf *conf)
 {
-  int		scr_width;
-  int		scr_height;
-
   zm->is_running = true;
   zm->selected = NULL;
   zm->max = 0;
   zm->conf = conf;
-  if (zm->conf->width == 0)
-    zm->conf->width = scr_width - zm->conf->x;
-  if (zm->conf->height == 0)
-    zm->conf->height = 20;
+  zm->cmp = zm->conf->icase == true ? strncasecmp : strncmp;
+  memset(zm->buf, 0, BUFSIZE);
+  list_init(&zm->items);
+  list_init(&zm->match);
+
   if ((zm->dpy = XOpenDisplay(NULL)) == NULL)
     die("Cannot open display");
   zm->screen = DefaultScreen(zm->dpy);
   zm->root = RootWindow(zm->dpy, zm->screen);
+  zm->scr_width = DisplayWidth(zm->dpy, zm->screen);
+  zm->scr_height = DisplayHeight(zm->dpy, zm->screen);
+  if (zm->conf->width == 0)
+    zm->conf->width = zm->scr_width - zm->conf->x;
+  if (zm->conf->height == 0)
+    zm->conf->height = DFL_HEIGHT;
+
   create_widow(zm);
-  zm->dconf.normal = create_gc(zm,
-				get_color(zm, conf->n_bgcolor),
-				get_color(zm, conf->n_fgcolor));
-  zm->dconf.selected = create_gc(zm,
-				get_color(zm, conf->s_bgcolor),
-				get_color(zm, conf->s_fgcolor));
+  zm->dw = XCreatePixmap(zm->dpy, zm->root,
+			 zm->conf->width, zm->conf->height,
+			 DefaultDepth(zm->dpy, zm->screen));
+  zm->dconf.n.bg = get_color(zm, conf->n_bgcolor);
+  zm->dconf.n.fg = get_color(zm, conf->n_fgcolor);
+  zm->dconf.s.bg = get_color(zm, conf->s_bgcolor);
+  zm->dconf.s.fg = get_color(zm, conf->s_fgcolor);
+  zm->dconf.gc = create_gc(zm, zm->dconf.n.bg, zm->dconf.n.fg);
   if ((zm->dconf.font_info = XLoadQueryFont(zm->dpy, conf->font)) == NULL
       && (zm->dconf.font_info = XLoadQueryFont(zm->dpy, "fixed")) == NULL)
     die("Cannot load font ``%s''\n", conf->font);
+
   read_stdin(zm);
-  scr_width = DisplayWidth(zm->dpy, zm->root);
-  scr_height = DisplayHeight(zm->dpy, zm->root);
-  XMapRaised(zm->dpy, zm->win);
   grab_keyboard(zm);
+  XMapRaised(zm->dpy, zm->win);
 }
 
 void		setup_conf(int ac, char **av, Conf *conf)
@@ -220,13 +285,11 @@ void		setup_conf(int ac, char **av, Conf *conf)
   for (i = 1; i < ac; i++)
     {
       if (!strcmp(av[i], "-i"))
-	conf->cmp = strncasecmp;
+	conf->icase = true;
       else if (!strcmp(av[i], "-b"))
 	conf->top = False;
       else if (!strcmp(av[i], "-x") && (++i < ac))
 	conf->x = atoi(av[i]);
-      else if (!strcmp(av[i], "-y") && (++i < ac))
-	conf->y = atoi(av[i]);
       else if (!strcmp(av[i], "-width") && (++i < ac))
 	conf->width = atoi(av[i]);
       else if (!strcmp(av[i], "-height") && (++i < ac))
@@ -242,6 +305,11 @@ void		setup_conf(int ac, char **av, Conf *conf)
       else if (!strcmp(av[i], "-sf") && (++i < ac))
 	conf->s_fgcolor = av[i];
     }
+}
+
+int		text_width(ZMenu *zm, char *str)
+{
+  return (XTextWidth(zm->dconf.font_info, str, strlen(str)));
 }
 
 void		usage(void)
